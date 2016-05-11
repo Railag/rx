@@ -13,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.util.List;
+
 import rx.Observable;
 
 public class MainActivity extends AppCompatActivity
@@ -106,5 +108,30 @@ public class MainActivity extends AppCompatActivity
                 .map(String::hashCode)
                 .map(i -> Integer.toString(i))
                 .subscribe(System.out::println);
+
+
+        query("Hello, world!")
+                .flatMap(Observable::from)
+                .subscribe(System.out::println);
+
+        query("Hello, world!")
+                .flatMap(Observable::from)
+                .flatMap(this::getTitle)
+                .filter(title -> title != null)
+                .take(5)
+                .doOnNext(this::saveTitle)
+                .subscribe(System.out::println);
     }
+
+    private void saveTitle(String title) {
+    }
+
+    Observable<List<String>> query(String text) {
+        return null;
+    }
+
+    Observable<String> getTitle(String url) {
+        return null;
+    }
+
 }
