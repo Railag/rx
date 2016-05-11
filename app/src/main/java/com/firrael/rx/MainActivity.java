@@ -14,8 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Action1;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -105,11 +103,6 @@ public class MainActivity extends AppCompatActivity
 
     private void rxInit() {
         Observable.just("Hello, world!")
-                .subscribe(new Action1<String>() {
-                    @Override
-                    public void call(String s) {
-                        System.out.println(s);
-                    }
-                });
+                .subscribe(System.out::println);
     }
 }
