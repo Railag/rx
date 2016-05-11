@@ -103,6 +103,8 @@ public class MainActivity extends AppCompatActivity
 
     private void rxInit() {
         Observable.just("Hello, world!")
+                .map(String::hashCode)
+                .map(i -> Integer.toString(i))
                 .subscribe(System.out::println);
     }
 }
