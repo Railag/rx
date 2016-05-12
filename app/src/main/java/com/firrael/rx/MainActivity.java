@@ -11,11 +11,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.TextView;
 
 import java.util.List;
 
 import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -28,13 +32,8 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show());
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -104,7 +103,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void rxInit() {
-        Observable.just("Hello, world!")
+        /*Observable.just("Hello, world!")
                 .map(String::hashCode)
                 .map(i -> Integer.toString(i))
                 .subscribe(System.out::println);
@@ -121,6 +120,72 @@ public class MainActivity extends AppCompatActivity
                 .take(5)
                 .doOnNext(this::saveTitle)
                 .subscribe(System.out::println);
+
+        query("Hello, world!")
+                .flatMap(Observable::from)
+                .flatMap(this::getTitle)
+                .filter(title -> title != null)
+                .take(5)
+                .doOnNext(this::saveTitle)
+                .subscribe(System.out::println);
+
+        query("Hello, world!")
+                .flatMap(Observable::from)
+                .flatMap(this::getTitle)
+                .filter(title -> title != null)
+                .take(5)
+                .doOnNext(this::saveTitle)
+                .subscribe(System.out::println);*/
+
+      /*  query("Hello, world!")
+                .flatMap(Observable::from)
+                .flatMap(this::getTitle)
+                .flatMap(this::getTitle)
+                .filter(title -> title != null)
+                .take(5)
+                .doOnNext(this::saveTitle)
+                .subscribe(System.out::println);
+*/
+        Observable.just("Hello, world!")
+                .flatMap(this::potentialException)
+                .flatMap(this::anotherPotentialException)
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onNext(String s) {
+                        System.out.println(s);
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("Completed!");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("Ouch!");
+                    }
+                });
+
+        TextView label = (TextView) findViewById(R.id.label);
+        assert label != null;
+
+        Observable.just("Test")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(label::setText);
+
+        Subscription subscription = Observable.just("Hello, World!")
+                .subscribe(System.out::println);
+
+        subscription.unsubscribe();
+    }
+
+    private Observable<String> anotherPotentialException(String s) {
+        return null;
+    }
+
+    private Observable<String> potentialException(String s) {
+        return null;
     }
 
     private void saveTitle(String title) {
