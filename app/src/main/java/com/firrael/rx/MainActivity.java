@@ -13,6 +13,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,10 +31,14 @@ import rx.schedulers.Schedulers;
 public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.fab) FloatingActionButton fab;
-    @BindView(R.id.drawer_layout) DrawerLayout drawer;
-    @BindView(R.id.nav_view) NavigationView navigationView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,14 +62,14 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
             requestItems("test");
     }
 
-    public void onItems() {//List<Item> items) {
+    public void onItems(List<JsonObject> objects) {//List<Item> items) {
         /*adapter.clear();
         adapter.addAll(items);*/
-
+        this.runOnUiThread(() -> Toast.makeText(MainActivity.this, "TEST success", Toast.LENGTH_LONG).show());
     }
 
     public void onItemsError(Throwable throwable) {
-        Toast.makeText(this, throwable.getMessage(), Toast.LENGTH_LONG).show();
+        this.runOnUiThread(() -> Toast.makeText(MainActivity.this, throwable.getMessage(), Toast.LENGTH_LONG).show());
     }
 
     // You can use this method to (re)start the restartable with a new parameter

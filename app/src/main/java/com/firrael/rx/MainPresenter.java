@@ -5,19 +5,10 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.JsonObject;
 
-import java.io.IOException;
+import java.util.List;
 
 import icepick.State;
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
-import rx.Observable;
+import rx.Subscriber;
 import rx.schedulers.Schedulers;
 
 /**
@@ -45,15 +36,7 @@ public class MainPresenter extends BasePresenter<MainActivity> {
 
     }
 
-    interface IPService {
-        String END = "http://ip.taobao.com";
-
-        @GET("/service/getIpInfo.php")
-        Observable<JsonObject> getIPInfo(@Query("ip") String ip);
-    }
-
-
-    static class LoggingInterceptor implements Interceptor {
+    /*static class LoggingInterceptor implements Interceptor {
         @Override
         public Response intercept(Chain chain) throws IOException {
             Request request = chain.request();
@@ -72,24 +55,43 @@ public class MainPresenter extends BasePresenter<MainActivity> {
 
             return response;
         }
-    }
+    }*/
 
     public void request(String name) {
         this.name = name;
         //    start(REQUEST_ITEMS);
-        OkHttpClient client = new OkHttpClient();
         //    client.interceptors().add(new LoggingInterceptor());
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(IPService.END).client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .build();
-        retrofit.create(IPService.class)
-                .getIPInfo("58.19.239.11")
-                .filter(jsonObject -> jsonObject.get("code").getAsInt() == 0)
-                .map(jsonObject1 -> jsonObject1.get("data"))
+
+        TestService service = App.api().create(TestService.class);
+
+        /*restartableLatestCache(REQUEST_ITEMS, () ->
+                        service.getPosts()
+                                //    .filter(response -> response.get("code").getAsInt() == 0)
+                                //    .map(jsonObject1 -> jsonObject1.get("data"))
+                                .subscribeOn(Schedulers.newThread()),
+                (activity, response) -> activity.onItems(response),
+                (activity, throwable) -> activity.onItemsError(throwable));
+        */
+        service.getPosts()
+                //    .filter(response -> response.get("code").getAsInt() == 0)
+                //    .map(jsonObject1 -> jsonObject1.get("data"))
                 .subscribeOn(Schedulers.newThread())
-                .subscribe(System.out::println);
+                .subscribe(new Subscriber<List<JsonObject>>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        getView().onItemsError(e);
+                    }
+
+                    @Override
+                    public void onNext(List<JsonObject> jsonObjects) {
+                        getView().onItems(jsonObjects);
+                    }
+                });
     }
 
     @Override
