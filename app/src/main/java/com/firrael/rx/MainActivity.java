@@ -65,11 +65,11 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
     public void onItems(List<JsonObject> objects) {//List<Item> items) {
         /*adapter.clear();
         adapter.addAll(items);*/
-        this.runOnUiThread(() -> Toast.makeText(MainActivity.this, "TEST success", Toast.LENGTH_LONG).show());
+        Toast.makeText(MainActivity.this, "TEST success", Toast.LENGTH_LONG).show();
     }
 
     public void onItemsError(Throwable throwable) {
-        this.runOnUiThread(() -> Toast.makeText(MainActivity.this, throwable.getMessage(), Toast.LENGTH_LONG).show());
+        Toast.makeText(MainActivity.this, throwable.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     // You can use this method to (re)start the restartable with a new parameter

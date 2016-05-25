@@ -9,6 +9,7 @@ import java.util.List;
 
 import icepick.State;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
@@ -77,6 +78,7 @@ public class MainPresenter extends BasePresenter<MainActivity> {
                 //    .filter(response -> response.get("code").getAsInt() == 0)
                 //    .map(jsonObject1 -> jsonObject1.get("data"))
                 .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<JsonObject>>() {
                     @Override
                     public void onCompleted() {
