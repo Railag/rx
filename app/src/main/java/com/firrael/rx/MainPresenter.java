@@ -21,7 +21,7 @@ public class MainPresenter extends BasePresenter<MainActivity> {
     protected void onCreate(Bundle savedState) {
         super.onCreate(savedState);
 
-        TestService service = App.api().create(TestService.class);
+        TestService service = App.createRetrofitService(TestService.class);
 
         /*restartableLatestCache(REQUEST_ITEMS, () ->
                         service.getPosts()
@@ -31,12 +31,10 @@ public class MainPresenter extends BasePresenter<MainActivity> {
                 (activity, response) -> activity.onItems(response),
                 (activity, throwable) -> activity.onItemsError(throwable));
         */
-        restartableLatestCache(REQUEST_ITEMS, () ->
-                        service.getPosts()
-                                //    .filter(response -> response.get("code").getAsInt() == 0)
-                                //    .map(jsonObject1 -> jsonObject1.get("data"))
-                                .subscribeOn(Schedulers.newThread())
-                                .observeOn(AndroidSchedulers.mainThread()),
+        restartableLatestCache(REQUEST_ITEMS,
+                () -> service.getPosts()
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread()),
                 MainActivity::onItems,
                 MainActivity::onItemsError);
 

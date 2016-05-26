@@ -13,8 +13,6 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.JsonObject;
-
 import java.util.List;
 
 import butterknife.BindView;
@@ -62,13 +60,14 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
             requestItems("test");
     }
 
-    public void onItems(List<JsonObject> objects) {//List<Item> items) {
+    public void onItems(List<Post> posts) {//List<Item> items) {
         /*adapter.clear();
         adapter.addAll(items);*/
         Toast.makeText(MainActivity.this, "TEST success", Toast.LENGTH_LONG).show();
     }
 
     public void onItemsError(Throwable throwable) {
+        throwable.printStackTrace();
         Toast.makeText(MainActivity.this, throwable.getMessage(), Toast.LENGTH_LONG).show();
     }
 

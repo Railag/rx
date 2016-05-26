@@ -17,5 +17,5 @@ public interface TestService {
     Observable<JsonObject> putPost(@Query("post") int post);
 
     @GET("/posts")
-    Observable<List<JsonObject>> getPosts();
+    Observable<List<Post>> getPosts();
 }
