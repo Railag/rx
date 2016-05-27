@@ -7,11 +7,16 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.List;
 
@@ -37,6 +42,13 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
     DrawerLayout drawer;
     @BindView(R.id.nav_view)
     NavigationView navigationView;
+    @BindView(R.id.postsList)
+    RecyclerView list;
+
+    @BindView(R.id.loading)
+    AVLoadingIndicatorView loading;
+
+    private PostsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,23 +68,30 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
 
         navigationView.setNavigationItemSelectedListener(this);
 
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        list.setLayoutManager(manager);
+
+        adapter = new PostsAdapter();
+        list.setAdapter(adapter);
+
         if (savedInstanceState == null)
             requestItems("test");
     }
 
-    public void onItems(List<Post> posts) {//List<Item> items) {
-        /*adapter.clear();
-        adapter.addAll(items);*/
+    public void onItems(List<Post> posts) {
         Toast.makeText(MainActivity.this, "TEST success", Toast.LENGTH_LONG).show();
+        adapter.setPosts(posts);
+        stopLoading();
     }
 
     public void onItemsError(Throwable throwable) {
         throwable.printStackTrace();
         Toast.makeText(MainActivity.this, throwable.getMessage(), Toast.LENGTH_LONG).show();
+        stopLoading();
     }
 
-    // You can use this method to (re)start the restartable with a new parameter
     private void requestItems(String query) {
+        startLoading();
         getPresenter().request(query);
     }
 
@@ -228,6 +247,14 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
 
     Observable<String> getTitle(String url) {
         return null;
+    }
+
+    void startLoading() {
+        loading.setVisibility(View.VISIBLE);
+    }
+
+    void stopLoading() {
+        loading.setVisibility(View.GONE);
     }
 
 }

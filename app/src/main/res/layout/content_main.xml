@@ -12,9 +12,23 @@
     tools:context="com.firrael.rx.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:indicator="BallTrianglePath"
+        app:indicator_color="@color/colorPrimary" />
+
     <TextView
         android:id="@+id/label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/postsList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </RelativeLayout>

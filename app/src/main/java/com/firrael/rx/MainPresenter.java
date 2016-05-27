@@ -40,15 +40,6 @@ public class MainPresenter extends BasePresenter<MainActivity> {
 
         if (savedState == null)
             start(REQUEST_ITEMS);
-
-
-        /*restartableLatestCache(REQUEST_ITEMS,
-                () -> App.getServerAPI()
-                        .getItems(name)
-                        .observeOn(AndroidSchedulers.mainThread()),
-                (activity, response) -> activity.onItems(response.items),
-                (activity, throwable) -> activity.onItemsError(throwable));
-        */
     }
 
     public void request(String name) {
