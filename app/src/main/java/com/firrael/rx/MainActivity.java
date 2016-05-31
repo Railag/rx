@@ -1,5 +1,7 @@
 package com.firrael.rx;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -7,32 +9,21 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.wang.avi.AVLoadingIndicatorView;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import nucleus.factory.RequiresPresenter;
-import nucleus.view.NucleusAppCompatActivity;
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
-@RequiresPresenter(MainPresenter.class)
-public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final String TAG_MAIN = "mainTag";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -42,13 +33,9 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
     DrawerLayout drawer;
     @BindView(R.id.nav_view)
     NavigationView navigationView;
-    @BindView(R.id.postsList)
-    RecyclerView list;
 
     @BindView(R.id.loading)
     AVLoadingIndicatorView loading;
-
-    private PostsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,32 +55,12 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        list.setLayoutManager(manager);
+        App.setMainActivity(this);
 
-        adapter = new PostsAdapter();
-        list.setAdapter(adapter);
-
-        if (savedInstanceState == null)
-            requestItems("test");
+        toSplash();
     }
 
-    public void onItems(List<Post> posts) {
-        Toast.makeText(MainActivity.this, "TEST success", Toast.LENGTH_LONG).show();
-        adapter.setPosts(posts);
-        stopLoading();
-    }
 
-    public void onItemsError(Throwable throwable) {
-        throwable.printStackTrace();
-        Toast.makeText(MainActivity.this, throwable.getMessage(), Toast.LENGTH_LONG).show();
-        stopLoading();
-    }
-
-    private void requestItems(String query) {
-        startLoading();
-        getPresenter().request(query);
-    }
 
     @Override
     public void onBackPressed() {
@@ -136,7 +103,7 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-            rxInit();
+
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
@@ -152,103 +119,6 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
         return true;
     }
 
-    private void rxInit() {
-        /*Observable.just("Hello, world!")
-                .map(String::hashCode)
-                .map(i -> Integer.toString(i))
-                .subscribe(System.out::println);
-
-
-        query("Hello, world!")
-                .flatMap(Observable::from)
-                .subscribe(System.out::println);
-
-        query("Hello, world!")
-                .flatMap(Observable::from)
-                .flatMap(this::getTitle)
-                .filter(title -> title != null)
-                .take(5)
-                .doOnNext(this::saveTitle)
-                .subscribe(System.out::println);
-
-        query("Hello, world!")
-                .flatMap(Observable::from)
-                .flatMap(this::getTitle)
-                .filter(title -> title != null)
-                .take(5)
-                .doOnNext(this::saveTitle)
-                .subscribe(System.out::println);
-
-        query("Hello, world!")
-                .flatMap(Observable::from)
-                .flatMap(this::getTitle)
-                .filter(title -> title != null)
-                .take(5)
-                .doOnNext(this::saveTitle)
-                .subscribe(System.out::println);*/
-
-      /*  query("Hello, world!")
-                .flatMap(Observable::from)
-                .flatMap(this::getTitle)
-                .flatMap(this::getTitle)
-                .filter(title -> title != null)
-                .take(5)
-                .doOnNext(this::saveTitle)
-                .subscribe(System.out::println);
-*/
-        Observable.just("Hello, world!")
-                .flatMap(this::potentialException)
-                .flatMap(this::anotherPotentialException)
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onNext(String s) {
-                        System.out.println(s);
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        System.out.println("Completed!");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        System.out.println("Ouch!");
-                    }
-                });
-
-        TextView label = (TextView) findViewById(R.id.label);
-        assert label != null;
-
-        Observable.just("Test")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(label::setText);
-
-        Subscription subscription = Observable.just("Hello, World!")
-                .subscribe(System.out::println);
-
-        subscription.unsubscribe();
-    }
-
-    private Observable<String> anotherPotentialException(String s) {
-        return null;
-    }
-
-    private Observable<String> potentialException(String s) {
-        return null;
-    }
-
-    private void saveTitle(String title) {
-    }
-
-    Observable<List<String>> query(String text) {
-        return null;
-    }
-
-    Observable<String> getTitle(String url) {
-        return null;
-    }
-
     void startLoading() {
         loading.setVisibility(View.VISIBLE);
     }
@@ -257,4 +127,30 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
         loading.setVisibility(View.GONE);
     }
 
+    public <T extends Fragment> void setFragment(final T fragment) {
+        runOnUiThread(() -> {
+            final FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+
+            // TODO custom transaction animations
+            fragmentTransaction.addToBackStack(fragment.getClass().getSimpleName());
+            fragmentTransaction.replace(R.id.mainFragment, fragment, TAG_MAIN);
+            fragmentTransaction.commitAllowingStateLoss();
+        });
+    }
+
+    public void toSplash() {
+        setFragment(SplashFragment.newInstance());
+    }
+
+    public void toLogin() {
+        setFragment(LoginFragment.newInstance());
+    }
+
+    public void toUserLandingScreen() {
+        // TODO
+    }
+
+    public void toCreateAccount() {
+        // TODO
+    }
 }

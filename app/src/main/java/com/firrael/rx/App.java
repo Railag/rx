@@ -6,6 +6,8 @@ import com.facebook.stetho.Stetho;
 import com.google.gson.Gson;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
+import java.lang.ref.WeakReference;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import okhttp3.OkHttpClient;
@@ -20,8 +22,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class App extends Application {
     private final static String API_ENDPOINT = "http://jsonplaceholder.typicode.com";
 
+    private static WeakReference<MainActivity> activityRef;
+
     private static Retrofit api;
     private static Realm realm;
+    private static RConnectorService rConnectorService;
 
     @Override
     public void onCreate() {
@@ -36,7 +41,7 @@ public class App extends Application {
         Realm.setDefaultConfiguration(realmConfig);
     }
 
-    public static Retrofit api() {
+    private static Retrofit api() {
         if (api == null) {
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -67,7 +72,22 @@ public class App extends Application {
         return realm;
     }
 
-    static <T> T createRetrofitService(final Class<T> clazz) {
+    public static RConnectorService restService() {
+        if (rConnectorService == null)
+            rConnectorService = createRetrofitService(RConnectorService.class);
+
+        return rConnectorService;
+    }
+
+    public static void setMainActivity(MainActivity activity) {
+        activityRef = new WeakReference<MainActivity>(activity);
+    }
+
+    public static MainActivity getMainActivity() {
+        return activityRef.get();
+    }
+
+    private static <T> T createRetrofitService(final Class<T> clazz) {
         return api().create(clazz);
     }
 }
