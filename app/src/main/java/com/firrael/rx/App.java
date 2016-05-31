@@ -2,8 +2,12 @@ package com.firrael.rx;
 
 import android.app.Application;
 
+import com.facebook.stetho.Stetho;
 import com.google.gson.Gson;
+import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -16,7 +20,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class App extends Application {
     private final static String API_ENDPOINT = "http://jsonplaceholder.typicode.com";
 
-    public static Retrofit api;
+    private static Retrofit api;
+    private static Realm realm;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                        .enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
+                        .enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
+                        .build());
+
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder(this).build();
+        Realm.setDefaultConfiguration(realmConfig);
+    }
 
     public static Retrofit api() {
         if (api == null) {
@@ -39,6 +57,14 @@ public class App extends Application {
         }
 
         return api;
+    }
+
+    public static Realm realm() {
+        if (realm == null) {
+            realm = Realm.getDefaultInstance();
+        }
+
+        return realm;
     }
 
     static <T> T createRetrofitService(final Class<T> clazz) {

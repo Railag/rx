@@ -2,11 +2,16 @@ package com.firrael.rx;
 
 import com.google.gson.annotations.SerializedName;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by firrael on 25.05.2016.
  */
-public class Post {
+public class Post extends RealmObject {
     public long userId;
+
+    @PrimaryKey
     public long id;
     public String title;
 

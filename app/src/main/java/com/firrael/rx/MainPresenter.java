@@ -3,7 +3,10 @@ package com.firrael.rx;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import java.util.List;
+
 import icepick.State;
+import io.realm.Realm;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -33,6 +36,7 @@ public class MainPresenter extends BasePresenter<MainActivity> {
         */
         restartableLatestCache(REQUEST_ITEMS,
                 () -> service.getPosts()
+                        .doOnNext(this::save)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread()),
                 MainActivity::onItems,
@@ -40,6 +44,16 @@ public class MainPresenter extends BasePresenter<MainActivity> {
 
         if (savedState == null)
             start(REQUEST_ITEMS);
+    }
+
+    private void save(List<Post> posts) {
+        Realm realm = App.realm();
+
+        realm.beginTransaction();
+
+        realm.copyToRealm(posts);
+
+        realm.commitTransaction();
     }
 
     public void request(String name) {

@@ -14,12 +14,6 @@ import nucleus.view.NucleusFragment;
  */
 public abstract class BaseFragment<P extends BasePresenter> extends NucleusFragment<P> {
 
-    protected MainActivity getMainActivity() {
-        return (MainActivity) getActivity();
-    }
-
-    protected abstract String getTitle();
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -28,10 +22,18 @@ public abstract class BaseFragment<P extends BasePresenter> extends NucleusFragm
             getMainActivity().setTitle(title);
         }
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+
+        initView(view);
+
+        return view;
     }
 
-    protected void initView() {
-        // TODO
+    protected MainActivity getMainActivity() {
+        return (MainActivity) getActivity();
     }
+
+    protected abstract String getTitle();
+
+    protected abstract void initView(View v);
 }
