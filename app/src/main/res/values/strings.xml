@@ -16,4 +16,5 @@
     <string name="create">Create</string>
     <string name="emptyFieldError">Fill all the fields</string>
     <string name="passwordRepeatPasswordError">Password and repeat password are different!</string>
+    <string name="userInfo">User Info</string>
 </resources>

@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void toUserLandingScreen() {
-        // TODO
+        setFragment(UserLandingFragment.newInstance());
     }
 
     public void toCreateAccount() {
