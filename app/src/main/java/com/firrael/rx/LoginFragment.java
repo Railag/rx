@@ -1,7 +1,6 @@
 package com.firrael.rx;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
 
 import butterknife.BindView;
@@ -26,11 +25,6 @@ public class LoginFragment extends BaseFragment<LoginPresenter> {
         LoginFragment fragment = new LoginFragment();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    protected void initView(View v) {
-
     }
 
     @Override

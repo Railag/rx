@@ -151,6 +151,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void toCreateAccount() {
-        // TODO
+        setFragment(CreateAccountFragment.newInstance());
     }
 }

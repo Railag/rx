@@ -10,4 +10,10 @@
     <string name="password">Password</string>
     <string name="login_email">Login / Email</string>
     <string name="create_account">Create Account</string>
+    <string name="createAccount">Create Account</string>
+    <string name="email">Email</string>
+    <string name="repeatPassword">Repeat Password</string>
+    <string name="create">Create</string>
+    <string name="emptyFieldError">Fill all the fields</string>
+    <string name="passwordRepeatPasswordError">Password and repeat password are different!</string>
 </resources>

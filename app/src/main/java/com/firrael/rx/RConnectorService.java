@@ -21,4 +21,8 @@ public interface RConnectorService {
     @FormUrlEncoded
     @POST("/login")
     Observable<LoginResult> login(@Field("login") String login, @Field("password") String password);
+
+    @FormUrlEncoded
+    @POST("/createAccount")
+    Observable<CreateAccountResult> createAccount(@Field("login") String login, @Field("email") String email, @Field("password") String password);
 }
