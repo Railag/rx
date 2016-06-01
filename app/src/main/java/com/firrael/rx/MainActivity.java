@@ -2,10 +2,13 @@ package com.firrael.rx;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -14,11 +17,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static butterknife.ButterKnife.findById;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -61,7 +70,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -100,18 +108,16 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
+        if (id == R.id.nav_profile) {
+            toUserLandingScreen();
+        } else if (id == R.id.nav_groups) {
+            // TODO to my groups
+        } else if (id == R.id.nav_new_group) {
+            // TODO to new group
         } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+            // TODO share app
+        } else if (id == R.id.nav_logout) {
+            // TODO user logout
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -152,5 +158,25 @@ public class MainActivity extends AppCompatActivity
 
     public void toCreateAccount() {
         setFragment(CreateAccountFragment.newInstance());
+    }
+
+    public void updateNavigationMenu() {
+        ImageView userImage = findById(this, R.id.userImage);
+        TextView userLogin = findById(this, R.id.userLogin);
+        TextView userEmail = findById(this, R.id.userEmail);
+
+        User user = User.get();
+        Glide.with(this).load(user.getProfileImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(userImage) {
+            @Override
+            protected void setResource(Bitmap resource) {
+                RoundedBitmapDrawable circularBitmapDrawable =
+                        RoundedBitmapDrawableFactory.create(MainActivity.this.getResources(), resource);
+                circularBitmapDrawable.setCircular(true);
+                userImage.setImageDrawable(circularBitmapDrawable);
+            }
+        });
+
+        userLogin.setText(user.getLogin());
+        userEmail.setText(user.getEmail());
     }
 }

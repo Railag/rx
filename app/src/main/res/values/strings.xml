@@ -17,4 +17,8 @@
     <string name="emptyFieldError">Fill all the fields</string>
     <string name="passwordRepeatPasswordError">Password and repeat password are different!</string>
     <string name="userInfo">User Info</string>
+    <string name="profile">Profile</string>
+    <string name="my_groups">My Groups</string>
+    <string name="create_new_group">Create New Group</string>
+    <string name="logout">Logout</string>
 </resources>

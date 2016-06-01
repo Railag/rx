@@ -101,6 +101,7 @@ public class CreateAccountFragment extends BaseFragment<CreateAccountPresenter> 
     public void onSuccess(CreateAccountResult result) {
         toast("success create account");
         stopLoading();
+        getMainActivity().updateNavigationMenu();
         getMainActivity().toUserLandingScreen();
     }
 

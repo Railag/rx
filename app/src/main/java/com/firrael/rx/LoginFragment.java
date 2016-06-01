@@ -51,6 +51,7 @@ public class LoginFragment extends BaseFragment<LoginPresenter> {
     public void onSuccess(LoginResult result) {
         toast("success login");
         stopLoading();
+        getMainActivity().updateNavigationMenu();
         getMainActivity().toUserLandingScreen();
     }
 

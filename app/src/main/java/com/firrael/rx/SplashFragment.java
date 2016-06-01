@@ -43,6 +43,7 @@ public class SplashFragment extends BaseFragment<SplashPresenter> {
     public void onSuccess(LoginResult result) {
         toast("success login");
         stopLoading();
+        getMainActivity().updateNavigationMenu();
         getMainActivity().toUserLandingScreen();
     }
 
