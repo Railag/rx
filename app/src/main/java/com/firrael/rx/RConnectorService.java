@@ -43,6 +43,6 @@ public interface RConnectorService {
     @POST("/group_create")
     Observable<CreateGroupResult> createGroup(@Field("groupName") String groupName);
 
-    @POST
+    @POST("/group_fetch")
     Observable<List<Group>> getGroups();
 }

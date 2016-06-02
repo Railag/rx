@@ -5,6 +5,7 @@ package com.firrael.rx.model;
  */
 public class Group {
     private String title;
+    private String imageUrl;
 
     public String getTitle() {
         return title;
@@ -12,5 +13,13 @@ public class Group {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

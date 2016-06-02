@@ -4,8 +4,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.firrael.rx.model.Group;
 
 import java.util.ArrayList;
@@ -38,6 +40,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
         Group group = groups.get(position);
 
         holder.title.setText(group.getTitle());
+        Glide.with(App.getMainActivity()).load(group.getImageUrl()).into(holder.image);
     }
 
     @Override
@@ -48,6 +51,8 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.groupTitle)
         TextView title;
+        @BindView(R.id.groupImage)
+        ImageView image;
 
 
         public ViewHolder(View itemView) {
