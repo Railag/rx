@@ -1,5 +1,7 @@
 package com.firrael.rx;
 
+import android.graphics.Bitmap;
+
 import java.util.List;
 
 import retrofit2.http.Field;
@@ -12,9 +14,6 @@ import rx.Observable;
  * Created by firrael on 25.05.2016.
  */
 public interface RConnectorService {
-    // @POST("/post/<post>")
-    //  Observable<JsonObject> putPost(@Query("post") int post);
-
     @GET("/posts")
     Observable<List<Post>> getPosts();
 
@@ -25,4 +24,11 @@ public interface RConnectorService {
     @FormUrlEncoded
     @POST("/createAccount")
     Observable<CreateAccountResult> createAccount(@Field("login") String login, @Field("email") String email, @Field("password") String password);
+
+    @POST("user_load_user_photo")
+    Observable<ImageResult> loadImage();
+
+    @FormUrlEncoded
+    @POST("/user_save_user_photo")
+    Observable<ImageResult> saveImage(@Field("image") Bitmap imageBitmap);
 }

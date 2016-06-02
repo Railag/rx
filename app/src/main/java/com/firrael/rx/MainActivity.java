@@ -2,8 +2,10 @@ package com.firrael.rx;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -12,13 +14,13 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
@@ -26,13 +28,17 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import nucleus.factory.RequiresPresenter;
+import nucleus.view.NucleusAppCompatActivity;
 
 import static butterknife.ButterKnife.findById;
 
-public class MainActivity extends AppCompatActivity
+@RequiresPresenter(MainPresenter.class)
+public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG_MAIN = "mainTag";
+    private static final int PHOTO_CODE = 1;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -63,6 +69,12 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
+
+        View headerView = navigationView.getHeaderView(0);
+        ImageView userImage = findById(headerView, R.id.userImage);
+        userImage.setOnClickListener(v -> {
+            makePhoto();
+        });
 
         App.setMainActivity(this);
 
@@ -125,6 +137,30 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    void makePhoto() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, PHOTO_CODE);
+        } else
+            Toast.makeText(this, getString(R.string.image_capture_no_camera), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PHOTO_CODE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            ImageView userImage = findById(this, R.id.userImage);
+            RoundedBitmapDrawable circularBitmapDrawable =
+                    RoundedBitmapDrawableFactory.create(MainActivity.this.getResources(), imageBitmap);
+            circularBitmapDrawable.setCircular(true);
+            userImage.setImageDrawable(circularBitmapDrawable);
+
+            getPresenter().request(imageBitmap);
+        }
+    }
+
     void startLoading() {
         loading.setVisibility(View.VISIBLE);
     }
@@ -178,5 +214,14 @@ public class MainActivity extends AppCompatActivity
 
         userLogin.setText(user.getLogin());
         userEmail.setText(user.getEmail());
+    }
+
+    public void onSuccess(ImageResult result) {
+        User.get().setProfileImageUrl(result.getUrl());
+        updateNavigationMenu();
+    }
+
+    public void onError(Throwable throwable) {
+        throwable.printStackTrace();
     }
 }
