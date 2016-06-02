@@ -1,4 +1,4 @@
-package com.firrael.rx;
+package com.firrael.rx.view;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -24,6 +24,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.firrael.rx.App;
+import com.firrael.rx.R;
+import com.firrael.rx.model.User;
+import com.firrael.rx.model.ImageResult;
+import com.firrael.rx.presenter.MainPresenter;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import butterknife.BindView;
@@ -123,9 +128,9 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
         if (id == R.id.nav_profile) {
             toUserLandingScreen();
         } else if (id == R.id.nav_groups) {
-            // TODO to my groups
+            toMyGroups();
         } else if (id == R.id.nav_new_group) {
-            // TODO to new group
+            toNewGroup();
         } else if (id == R.id.nav_share) {
             // TODO share app
         } else if (id == R.id.nav_logout) {
@@ -161,11 +166,11 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
         }
     }
 
-    void startLoading() {
+    public void startLoading() {
         loading.setVisibility(View.VISIBLE);
     }
 
-    void stopLoading() {
+    public void stopLoading() {
         loading.setVisibility(View.GONE);
     }
 
@@ -194,6 +199,14 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
 
     public void toCreateAccount() {
         setFragment(CreateAccountFragment.newInstance());
+    }
+
+    public void toMyGroups() {
+        setFragment(MyGroupsFragment.newInstance());
+    }
+
+    public void toNewGroup() {
+        setFragment(NewGroupFragment.newInstance());
     }
 
     public void updateNavigationMenu() {

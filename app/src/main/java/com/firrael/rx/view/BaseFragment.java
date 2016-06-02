@@ -1,4 +1,4 @@
-package com.firrael.rx;
+package com.firrael.rx.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.firrael.rx.App;
+import com.firrael.rx.presenter.BasePresenter;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;

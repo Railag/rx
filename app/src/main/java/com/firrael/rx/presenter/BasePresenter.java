@@ -1,4 +1,4 @@
-package com.firrael.rx;
+package com.firrael.rx.presenter;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

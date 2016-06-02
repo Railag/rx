@@ -1,17 +1,23 @@
-package com.firrael.rx;
+package com.firrael.rx.presenter;
 
 import android.os.Bundle;
+
+import com.firrael.rx.App;
+import com.firrael.rx.Requests;
+import com.firrael.rx.model.LoginResult;
+import com.firrael.rx.RConnectorService;
+import com.firrael.rx.view.SplashFragment;
 
 import icepick.State;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import static com.firrael.rx.Requests.REQUEST_SPLASH;
+
 /**
  * Created by Railag on 31.05.2016.
  */
-public class LoginPresenter extends BasePresenter<LoginFragment> {
-
-    private static final int REQUEST_LOGIN = 3;
+public class SplashPresenter extends BasePresenter<SplashFragment> {
 
     @State
     String login;
@@ -25,16 +31,16 @@ public class LoginPresenter extends BasePresenter<LoginFragment> {
 
         RConnectorService service = App.restService();
 
-        restartableLatestCache(REQUEST_LOGIN,
+        restartableLatestCache(REQUEST_SPLASH,
                 () -> service.login(login, password)
                         .doOnNext(this::save)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread()),
-                LoginFragment::onSuccess,
-                LoginFragment::onError);
+                SplashFragment::onSuccess,
+                SplashFragment::onError);
 
         if (savedState == null)
-            start(REQUEST_LOGIN);
+            start(REQUEST_SPLASH);
     }
 
     private void save(LoginResult result) {
@@ -44,7 +50,16 @@ public class LoginPresenter extends BasePresenter<LoginFragment> {
     public void request(String login, String password) {
         this.login = login;
         this.password = password;
-        start(REQUEST_LOGIN);
+        start(REQUEST_SPLASH);
     }
-}
 
+   /* private void save(List<Post> posts) {
+        Realm realm = App.realm();
+
+        realm.beginTransaction();
+
+        realm.copyToRealm(posts);
+
+        realm.commitTransaction();
+    }*/
+}

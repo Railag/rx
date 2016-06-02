@@ -3,6 +3,7 @@ package com.firrael.rx;
 import android.app.Application;
 
 import com.facebook.stetho.Stetho;
+import com.firrael.rx.view.MainActivity;
 import com.google.gson.Gson;
 import com.uphyca.stetho_realm.RealmInspectorModulesProvider;
 

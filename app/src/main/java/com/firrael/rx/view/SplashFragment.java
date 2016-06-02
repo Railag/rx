@@ -1,6 +1,10 @@
-package com.firrael.rx;
+package com.firrael.rx.view;
 
 import android.os.Bundle;
+
+import com.firrael.rx.model.LoginResult;
+import com.firrael.rx.R;
+import com.firrael.rx.presenter.SplashPresenter;
 
 import nucleus.factory.RequiresPresenter;
 

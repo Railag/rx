@@ -1,4 +1,4 @@
-package com.firrael.rx;
+package com.firrael.rx.view;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -7,6 +7,10 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.firrael.rx.R;
+import com.firrael.rx.model.CreateAccountResult;
+import com.firrael.rx.presenter.CreateAccountPresenter;
 
 import butterknife.BindView;
 import butterknife.OnClick;

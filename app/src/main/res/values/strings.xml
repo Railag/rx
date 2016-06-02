@@ -22,4 +22,6 @@
     <string name="create_new_group">Create New Group</string>
     <string name="logout">Logout</string>
     <string name="image_capture_no_camera">No Camera Available!</string>
+    <string name="createNewGroup">Create New Group</string>
+    <string name="myGroups">My Groups</string>
 </resources>

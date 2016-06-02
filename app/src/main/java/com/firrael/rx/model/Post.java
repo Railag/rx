@@ -1,4 +1,4 @@
-package com.firrael.rx;
+package com.firrael.rx.model;
 
 import com.google.gson.annotations.SerializedName;
 

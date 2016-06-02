@@ -1,8 +1,12 @@
-package com.firrael.rx;
+package com.firrael.rx.view;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import com.firrael.rx.R;
+import com.firrael.rx.model.User;
+import com.firrael.rx.presenter.UserLandingPresenter;
 
 import butterknife.BindView;
 import nucleus.factory.RequiresPresenter;

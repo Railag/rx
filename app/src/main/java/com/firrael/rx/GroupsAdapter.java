@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.firrael.rx.model.Group;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,42 +15,39 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by firrael on 27.05.2016.
+ * Created by Railag on 02.06.2016.
  */
-public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
+public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder> {
 
-    private List<Post> posts = new ArrayList<>();
+    private List<Group> groups = new ArrayList<>();
 
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
         notifyDataSetChanged();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.item_post, parent, false);
+        View view = inflater.inflate(R.layout.item_group, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Post post = posts.get(position);
+        Group group = groups.get(position);
 
-        holder.title.setText(post.title);
-        holder.text.setText(post.text);
+        holder.title.setText(group.getTitle());
     }
 
     @Override
     public int getItemCount() {
-        return posts.size();
+        return groups.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.postTitle)
+        @BindView(R.id.groupTitle)
         TextView title;
-        @BindView(R.id.postText)
-        TextView text;
 
 
         public ViewHolder(View itemView) {
