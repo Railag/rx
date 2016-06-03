@@ -81,7 +81,7 @@ public class App extends Application {
     }
 
     public static void setMainActivity(MainActivity activity) {
-        activityRef = new WeakReference<MainActivity>(activity);
+        activityRef = new WeakReference<>(activity);
     }
 
     public static MainActivity getMainActivity() {

@@ -209,6 +209,14 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
         setFragment(NewGroupFragment.newInstance());
     }
 
+    public void toGroupMemberScreen() {
+        setFragment(GroupMemberFragment.newInstance());
+    }
+
+    public void toGroupCreatorScreen() {
+        setFragment(GroupCreatorFragment.newInstance());
+    };
+
     public void updateNavigationMenu() {
         ImageView userImage = findById(this, R.id.userImage);
         TextView userLogin = findById(this, R.id.userLogin);

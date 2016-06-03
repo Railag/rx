@@ -24,4 +24,14 @@
     <string name="image_capture_no_camera">No Camera Available!</string>
     <string name="createNewGroup">Create New Group</string>
     <string name="myGroups">My Groups</string>
+    <string name="send">Send</string>
+    <string name="new_message">New Message</string>
+    <string name="addUser">Add User</string>
+    <string name="removeUser">Remove User</string>
+    <string name="editGroup">Edit Group</string>
+    <string name="send_pn">Send PN</string>
+    <string name="collapse_buttons">Collapse Buttons</string>
+    <string name="add">Add</string>
+    <string name="user_login_email">User login / email</string>
+    <string name="remove">Remove</string>
 </resources>

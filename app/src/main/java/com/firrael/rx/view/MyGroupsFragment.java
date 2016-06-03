@@ -65,7 +65,6 @@ public class MyGroupsFragment extends BaseFragment<MyGroupsPresenter> {
 
     public void onSuccess(List<Group> groups) {
         stopLoading();
-        // TODO
         adapter.setGroups(groups);
     }
 

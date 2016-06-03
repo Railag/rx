@@ -2,12 +2,16 @@ package com.firrael.rx;
 
 import android.graphics.Bitmap;
 
+import com.firrael.rx.model.AddUserResult;
 import com.firrael.rx.model.CreateAccountResult;
 import com.firrael.rx.model.CreateGroupResult;
 import com.firrael.rx.model.Group;
 import com.firrael.rx.model.ImageResult;
 import com.firrael.rx.model.LoginResult;
+import com.firrael.rx.model.Message;
 import com.firrael.rx.model.Post;
+import com.firrael.rx.model.RemoveUserResult;
+import com.firrael.rx.view.ChatUser;
 
 import java.util.List;
 
@@ -32,7 +36,7 @@ public interface RConnectorService {
     @POST("/createAccount")
     Observable<CreateAccountResult> createAccount(@Field("login") String login, @Field("email") String email, @Field("password") String password);
 
-    @POST("user_load_user_photo")
+    @POST("/user_load_user_photo")
     Observable<ImageResult> loadImage();
 
     @FormUrlEncoded
@@ -41,8 +45,28 @@ public interface RConnectorService {
 
     @FormUrlEncoded
     @POST("/group_create")
-    Observable<CreateGroupResult> createGroup(@Field("groupName") String groupName);
+    Observable<CreateGroupResult> createGroup(@Field("group_name") String groupName);
 
     @POST("/group_fetch")
     Observable<List<Group>> getGroups();
+
+    @FormUrlEncoded
+    @POST("/group_send_message")
+    Observable<List<Message>> sendMessage(@Field("group_id") long groupId, @Field("message") String message);
+
+    @FormUrlEncoded
+    @POST("/group_fetch_messages")
+    Observable<List<Message>> fetchMessages(@Field("group_id") long groupId);
+
+    @FormUrlEncoded
+    @POST("/group_add_user")
+    Observable<AddUserResult> addUser(@Field("login") String addLogin);
+
+    @FormUrlEncoded
+    @POST("/group_remove_user")
+    Observable<RemoveUserResult> removeUser(@Field("login") String removeLogin);
+
+    @FormUrlEncoded
+    @POST("/group_fetch_users")
+    Observable<List<ChatUser>> fetchUsers(@Field("group_id") long groupId);
 }

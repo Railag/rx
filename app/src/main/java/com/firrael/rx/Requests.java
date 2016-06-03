@@ -10,4 +10,10 @@ public class Requests {
     public static final int REQUEST_SAVE_IMAGE = 4;
     public static final int REQUEST_CREATE_GROUP = 5;
     public static final int REQUEST_MY_GROUPS = 6;
+    public static final int REQUEST_SEND_MESSAGE = 7;
+    public static final int REQUEST_SEND_MESSAGE_CREATOR = 8;
+    public static final int REQUEST_FETCH_MESSAGES = 9;
+    public static final int REQUEST_ADD_USER = 10;
+    public static final int REQUEST_REMOVE_USER = 11;
+    public static final int REQUEST_FETCH_USERS = 12;
 }
