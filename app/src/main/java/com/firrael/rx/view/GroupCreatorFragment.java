@@ -94,6 +94,21 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
         dialog.show();
     }
 
+    @OnClick(R.id.editGroupButton)
+    void editGroup() {
+        // TODO out of scope (edit group name, group image dialog)
+    }
+
+    @OnClick(R.id.sendPNButton)
+    void sendPN() {
+        // TODO show dialog with PN content construction
+    }
+
+    @OnClick(R.id.collapseButtonsButton)
+    void collapseButtons() {
+        // TODO out of scope (hide all creator buttons, convert UI into member group UI + expand buttons button)
+    }
+
     @Override
     protected String getTitle() {
         return "";
@@ -143,6 +158,4 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
     public void onErrorFetchUsers(Throwable throwable) {
         throwable.printStackTrace();
     }
-
-
 }
