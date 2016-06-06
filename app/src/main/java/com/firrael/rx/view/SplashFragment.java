@@ -1,9 +1,12 @@
 package com.firrael.rx.view;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.TextUtils;
 
-import com.firrael.rx.model.LoginResult;
 import com.firrael.rx.R;
+import com.firrael.rx.model.User;
+import com.firrael.rx.model.UserResult;
 import com.firrael.rx.presenter.SplashPresenter;
 
 import nucleus.factory.RequiresPresenter;
@@ -30,7 +33,19 @@ public class SplashFragment extends BaseFragment<SplashPresenter> {
 
         if (savedInstanceState == null) {
             startLoading();
-            getPresenter().request("test1", "test2");
+
+            User user = User.get(getActivity());
+            String token = user.getToken();
+
+            if (!TextUtils.isEmpty(token))
+                getPresenter().request(user.getLogin(), token);
+            else {
+                Handler handler = new Handler();
+                handler.postDelayed(() -> {
+                    stopLoading();
+                    getMainActivity().toLogin();
+                }, 3000);
+            }
         }
     }
 
@@ -44,9 +59,14 @@ public class SplashFragment extends BaseFragment<SplashPresenter> {
         return R.layout.fragment_splash;
     }
 
-    public void onSuccess(LoginResult result) {
+    public void onSuccess(UserResult result) {
         toast("success login");
         stopLoading();
+        if (result == null) {
+            onError(new IllegalArgumentException());
+            return;
+        }
+        User.save(result, getActivity());
         getMainActivity().updateNavigationMenu();
         getMainActivity().toUserLandingScreen();
     }

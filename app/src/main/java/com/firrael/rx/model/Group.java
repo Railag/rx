@@ -10,11 +10,26 @@ public class Group implements Parcelable {
     private long id;
     private String title;
     private String imageUrl;
+    private boolean isCreator;
 
     protected Group(Parcel in) {
         id = in.readLong();
         title = in.readString();
         imageUrl = in.readString();
+        isCreator = in.readByte() != 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(title);
+        dest.writeString(imageUrl);
+        dest.writeByte((byte) (isCreator ? 1 : 0));
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<Group> CREATOR = new Creator<Group>() {
@@ -53,15 +68,11 @@ public class Group implements Parcelable {
         this.id = id;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public boolean isCreator() {
+        return isCreator;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(title);
-        dest.writeString(imageUrl);
+    public void setCreator(boolean creator) {
+        isCreator = creator;
     }
 }

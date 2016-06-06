@@ -3,8 +3,6 @@ package com.firrael.rx.presenter;
 import android.os.Bundle;
 
 import com.firrael.rx.App;
-import com.firrael.rx.Requests;
-import com.firrael.rx.model.LoginResult;
 import com.firrael.rx.RConnectorService;
 import com.firrael.rx.view.SplashFragment;
 
@@ -23,7 +21,7 @@ public class SplashPresenter extends BasePresenter<SplashFragment> {
     String login;
 
     @State
-    String password; // TODO replace with Token
+    String token;
 
     @Override
     protected void onCreate(Bundle savedState) {
@@ -32,24 +30,16 @@ public class SplashPresenter extends BasePresenter<SplashFragment> {
         RConnectorService service = App.restService();
 
         restartableLatestCache(REQUEST_SPLASH,
-                () -> service.login(login, password)
-                        .doOnNext(this::save)
+                () -> service.startupLogin(login, token)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread()),
                 SplashFragment::onSuccess,
                 SplashFragment::onError);
-
-        if (savedState == null)
-            start(REQUEST_SPLASH);
     }
 
-    private void save(LoginResult result) {
-        // TODO save user info
-    }
-
-    public void request(String login, String password) {
+    public void request(String login, String token) {
         this.login = login;
-        this.password = password;
+        this.token = token;
         start(REQUEST_SPLASH);
     }
 

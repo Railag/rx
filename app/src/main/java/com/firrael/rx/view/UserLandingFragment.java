@@ -24,7 +24,7 @@ public class UserLandingFragment extends BaseFragment<UserLandingPresenter> { //
 
     @Override
     protected void initView(View v) {
-        User user = User.get();
+        User user = User.get(getActivity());
         loginText.setText(user.getLogin());
         emailText.setText(user.getEmail());
     }

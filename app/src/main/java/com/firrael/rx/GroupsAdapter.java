@@ -41,6 +41,16 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
 
         holder.title.setText(group.getTitle());
         Glide.with(App.getMainActivity()).load(group.getImageUrl()).into(holder.image);
+
+        holder.itemView.setOnClickListener(v -> {
+            boolean isCreator = group.isCreator();
+            if (App.getMainActivity() != null) {
+                if (isCreator)
+                    App.getMainActivity().toGroupCreatorScreen(group);
+                else
+                    App.getMainActivity().toGroupMemberScreen(group);
+            }
+        });
     }
 
     @Override
@@ -53,7 +63,6 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
         TextView title;
         @BindView(R.id.groupImage)
         ImageView image;
-
 
         public ViewHolder(View itemView) {
             super(itemView);

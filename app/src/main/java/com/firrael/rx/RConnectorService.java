@@ -3,14 +3,13 @@ package com.firrael.rx;
 import android.graphics.Bitmap;
 
 import com.firrael.rx.model.AddUserResult;
-import com.firrael.rx.model.CreateAccountResult;
 import com.firrael.rx.model.CreateGroupResult;
 import com.firrael.rx.model.Group;
 import com.firrael.rx.model.ImageResult;
-import com.firrael.rx.model.LoginResult;
 import com.firrael.rx.model.Message;
 import com.firrael.rx.model.Post;
 import com.firrael.rx.model.RemoveUserResult;
+import com.firrael.rx.model.UserResult;
 import com.firrael.rx.view.ChatUser;
 
 import java.util.List;
@@ -29,12 +28,16 @@ public interface RConnectorService {
     Observable<List<Post>> getPosts();
 
     @FormUrlEncoded
-    @POST("/login")
-    Observable<LoginResult> login(@Field("login") String login, @Field("password") String password);
+    @POST("/user/login")
+    Observable<UserResult> login(@Field("login") String login, @Field("password") String password);
 
     @FormUrlEncoded
-    @POST("/createAccount")
-    Observable<CreateAccountResult> createAccount(@Field("login") String login, @Field("email") String email, @Field("password") String password);
+    @POST("/user/startup_login")
+    Observable<UserResult> startupLogin(@Field("login") String login, @Field("token") String token);
+
+    @FormUrlEncoded
+    @POST("/user")
+    Observable<UserResult> createAccount(@Field("login") String login, @Field("email") String email, @Field("password") String password);
 
     @POST("/user_load_user_photo")
     Observable<ImageResult> loadImage();

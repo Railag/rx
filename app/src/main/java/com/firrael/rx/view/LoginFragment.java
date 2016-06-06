@@ -3,9 +3,10 @@ package com.firrael.rx.view;
 import android.os.Bundle;
 import android.widget.EditText;
 
-import com.firrael.rx.presenter.LoginPresenter;
-import com.firrael.rx.model.LoginResult;
 import com.firrael.rx.R;
+import com.firrael.rx.model.User;
+import com.firrael.rx.model.UserResult;
+import com.firrael.rx.presenter.LoginPresenter;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -52,9 +53,14 @@ public class LoginFragment extends BaseFragment<LoginPresenter> {
         getMainActivity().toCreateAccount();
     }
 
-    public void onSuccess(LoginResult result) {
+    public void onSuccess(UserResult result) {
         toast("success login");
         stopLoading();
+        if (result == null) {
+            onError(new IllegalArgumentException());
+            return;
+        }
+        User.save(result, getActivity());
         getMainActivity().updateNavigationMenu();
         getMainActivity().toUserLandingScreen();
     }

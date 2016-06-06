@@ -26,8 +26,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.firrael.rx.App;
 import com.firrael.rx.R;
-import com.firrael.rx.model.User;
+import com.firrael.rx.model.Group;
 import com.firrael.rx.model.ImageResult;
+import com.firrael.rx.model.User;
 import com.firrael.rx.presenter.MainPresenter;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -134,7 +135,8 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
         } else if (id == R.id.nav_share) {
             // TODO share app
         } else if (id == R.id.nav_logout) {
-            // TODO user logout
+            User.logout(this);
+            toLogin();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -209,20 +211,22 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
         setFragment(NewGroupFragment.newInstance());
     }
 
-    public void toGroupMemberScreen() {
-        setFragment(GroupMemberFragment.newInstance());
+    public void toGroupMemberScreen(Group group) {
+        setFragment(GroupMemberFragment.newInstance(group));
     }
 
-    public void toGroupCreatorScreen() {
-        setFragment(GroupCreatorFragment.newInstance());
-    };
+    public void toGroupCreatorScreen(Group group) {
+        setFragment(GroupCreatorFragment.newInstance(group));
+    }
+
+    ;
 
     public void updateNavigationMenu() {
         ImageView userImage = findById(this, R.id.userImage);
         TextView userLogin = findById(this, R.id.userLogin);
         TextView userEmail = findById(this, R.id.userEmail);
 
-        User user = User.get();
+        User user = User.get(this);
         Glide.with(this).load(user.getProfileImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(userImage) {
             @Override
             protected void setResource(Bitmap resource) {
@@ -238,7 +242,7 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
     }
 
     public void onSuccess(ImageResult result) {
-        User.get().setProfileImageUrl(result.getUrl());
+        User.get(this).setProfileImageUrl(result.getUrl());
         updateNavigationMenu();
     }
 

@@ -9,7 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.firrael.rx.R;
-import com.firrael.rx.model.CreateAccountResult;
+import com.firrael.rx.model.UserResult;
+import com.firrael.rx.model.User;
 import com.firrael.rx.presenter.CreateAccountPresenter;
 
 import butterknife.BindView;
@@ -102,9 +103,10 @@ public class CreateAccountFragment extends BaseFragment<CreateAccountPresenter> 
         getPresenter().request(login, email, password);
     }
 
-    public void onSuccess(CreateAccountResult result) {
+    public void onSuccess(UserResult result) {
         toast("success create account");
         stopLoading();
+        User.save(result, getActivity());
         getMainActivity().updateNavigationMenu();
         getMainActivity().toUserLandingScreen();
     }

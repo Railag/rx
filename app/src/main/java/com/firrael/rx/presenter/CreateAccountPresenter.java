@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import com.firrael.rx.App;
 import com.firrael.rx.RConnectorService;
-import com.firrael.rx.model.CreateAccountResult;
 import com.firrael.rx.view.CreateAccountFragment;
 
 import icepick.State;
@@ -34,18 +33,10 @@ public class CreateAccountPresenter extends BasePresenter<CreateAccountFragment>
 
         restartableLatestCache(REQUEST_CREATE_ACCOUNT,
                 () -> service.createAccount(login, email, password)
-                        .doOnNext(this::save)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread()),
                 CreateAccountFragment::onSuccess,
                 CreateAccountFragment::onError);
-
-        if (savedState != null)
-            start(REQUEST_CREATE_ACCOUNT);
-    }
-
-    private void save(CreateAccountResult result) {
-        // TODO save user info
     }
 
     public void request(String login, String email, String password) {

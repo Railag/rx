@@ -3,8 +3,6 @@ package com.firrael.rx.presenter;
 import android.os.Bundle;
 
 import com.firrael.rx.App;
-import com.firrael.rx.Requests;
-import com.firrael.rx.model.LoginResult;
 import com.firrael.rx.RConnectorService;
 import com.firrael.rx.view.LoginFragment;
 
@@ -32,19 +30,11 @@ public class LoginPresenter extends BasePresenter<LoginFragment> {
         RConnectorService service = App.restService();
 
         restartableLatestCache(REQUEST_LOGIN,
-                () -> service.login(login, password)
-                        .doOnNext(this::save)
+        () -> service.login(login, password)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread()),
                 LoginFragment::onSuccess,
                 LoginFragment::onError);
-
-        if (savedState == null)
-            start(REQUEST_LOGIN);
-    }
-
-    private void save(LoginResult result) {
-        // TODO save user info
     }
 
     public void request(String login, String password) {

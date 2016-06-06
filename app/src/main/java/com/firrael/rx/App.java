@@ -21,7 +21,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by firrael on 25.05.2016.
  */
 public class App extends Application {
-    private final static String API_ENDPOINT = "http://jsonplaceholder.typicode.com";
+    private final static String API_ENDPOINT = "http://10.0.3.2:3000"; //http://jsonplaceholder.typicode.com";
+
+    public static final String PREFS = "prefs";
 
     private static WeakReference<MainActivity> activityRef;
 

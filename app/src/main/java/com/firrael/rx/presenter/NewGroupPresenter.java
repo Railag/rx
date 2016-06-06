@@ -33,9 +33,6 @@ public class NewGroupPresenter extends BasePresenter<NewGroupFragment> {
                         .observeOn(AndroidSchedulers.mainThread()),
                 NewGroupFragment::onSuccess,
                 NewGroupFragment::onError);
-
-        if (savedState != null)
-            start(REQUEST_CREATE_GROUP);
     }
 
     public void request(String groupName) {

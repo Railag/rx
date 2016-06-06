@@ -35,9 +35,6 @@ public class GroupMemberPresenter extends BasePresenter<GroupMemberFragment> {
                         .observeOn(AndroidSchedulers.mainThread()),
                 GroupMemberFragment::onSuccess,
                 GroupMemberFragment::onError);
-
-        if (savedState != null)
-            start(REQUEST_SEND_MESSAGE);
     }
 
     public void sendMessage(String message, long groupId) {

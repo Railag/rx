@@ -34,9 +34,6 @@ public class MainPresenter extends BasePresenter<MainActivity> {
                         .observeOn(AndroidSchedulers.mainThread()),
                 MainActivity::onSuccess,
                 MainActivity::onError);
-
-        if (savedState != null)
-            start(REQUEST_SAVE_IMAGE);
     }
 
     public void request(Bitmap image) {
