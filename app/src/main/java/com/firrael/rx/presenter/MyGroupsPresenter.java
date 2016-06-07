@@ -6,6 +6,7 @@ import com.firrael.rx.App;
 import com.firrael.rx.RConnectorService;
 import com.firrael.rx.view.MyGroupsFragment;
 
+import icepick.State;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -16,6 +17,9 @@ import static com.firrael.rx.Requests.REQUEST_MY_GROUPS;
  */
 public class MyGroupsPresenter extends BasePresenter<MyGroupsFragment> {
 
+    @State
+    long creatorId;
+
     @Override
     protected void onCreate(Bundle savedState) {
         super.onCreate(savedState);
@@ -23,7 +27,7 @@ public class MyGroupsPresenter extends BasePresenter<MyGroupsFragment> {
         RConnectorService service = App.restService();
 
         restartableLatestCache(REQUEST_MY_GROUPS,
-                () -> service.getGroups()
+                () -> service.getGroups(creatorId)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread()),
                 MyGroupsFragment::onSuccess,
@@ -33,7 +37,8 @@ public class MyGroupsPresenter extends BasePresenter<MyGroupsFragment> {
             start(REQUEST_MY_GROUPS);
     }
 
-    public void request() {
+    public void request(long creatorID) {
+        this.creatorId = creatorID;
         start(REQUEST_MY_GROUPS);
     }
 }

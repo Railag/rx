@@ -47,11 +47,12 @@ public interface RConnectorService {
     Observable<ImageResult> saveImage(@Field("image") Bitmap imageBitmap);
 
     @FormUrlEncoded
-    @POST("/group_create")
-    Observable<CreateGroupResult> createGroup(@Field("group_name") String groupName);
+    @POST("/group")
+    Observable<CreateGroupResult> createGroup(@Field("title") String groupName, @Field("creator") long creatorId);
 
-    @POST("/group_fetch")
-    Observable<List<Group>> getGroups();
+    @FormUrlEncoded
+    @POST("/group/fetch")
+    Observable<List<Group>> getGroups(@Field("creator") long creatorId);
 
     @FormUrlEncoded
     @POST("/group_send_message")

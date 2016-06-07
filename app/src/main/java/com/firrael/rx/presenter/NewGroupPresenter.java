@@ -21,6 +21,9 @@ public class NewGroupPresenter extends BasePresenter<NewGroupFragment> {
     @State
     String groupName;
 
+    @State
+    long creatorId;
+
     @Override
     protected void onCreate(Bundle savedState) {
         super.onCreate(savedState);
@@ -28,15 +31,16 @@ public class NewGroupPresenter extends BasePresenter<NewGroupFragment> {
         RConnectorService service = App.restService();
 
         restartableLatestCache(REQUEST_CREATE_GROUP,
-                () -> service.createGroup(groupName)
+                () -> service.createGroup(groupName, creatorId)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread()),
                 NewGroupFragment::onSuccess,
                 NewGroupFragment::onError);
     }
 
-    public void request(String groupName) {
+    public void request(String groupName, long creatorId) {
         this.groupName = groupName;
+        this.creatorId = creatorId;
         start(REQUEST_CREATE_GROUP);
     }
 }

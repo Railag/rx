@@ -222,9 +222,11 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
     ;
 
     public void updateNavigationMenu() {
-        ImageView userImage = findById(this, R.id.userImage);
-        TextView userLogin = findById(this, R.id.userLogin);
-        TextView userEmail = findById(this, R.id.userEmail);
+        View headerView = navigationView.getHeaderView(0);
+
+        ImageView userImage = findById(headerView, R.id.userImage);
+        TextView userLogin = findById(headerView, R.id.userLogin);
+        TextView userEmail = findById(headerView, R.id.userEmail);
 
         User user = User.get(this);
         Glide.with(this).load(user.getProfileImageUrl()).asBitmap().centerCrop().into(new BitmapImageViewTarget(userImage) {

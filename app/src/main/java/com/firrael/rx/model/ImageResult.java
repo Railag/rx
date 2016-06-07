@@ -3,7 +3,7 @@ package com.firrael.rx.model;
 /**
  * Created by Railag on 02.06.2016.
  */
-public class ImageResult {
+public class ImageResult extends Result {
     private String url;
 
     public String getUrl() {

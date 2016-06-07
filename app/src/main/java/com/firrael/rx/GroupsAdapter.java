@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.firrael.rx.model.Group;
+import com.firrael.rx.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,8 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
         Glide.with(App.getMainActivity()).load(group.getImageUrl()).into(holder.image);
 
         holder.itemView.setOnClickListener(v -> {
-            boolean isCreator = group.isCreator();
+            User user = User.get(App.getMainActivity());
+            boolean isCreator = user.getId() == group.getCreator();
             if (App.getMainActivity() != null) {
                 if (isCreator)
                     App.getMainActivity().toGroupCreatorScreen(group);

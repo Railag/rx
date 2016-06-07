@@ -9,13 +9,20 @@ import com.firrael.rx.Utils;
 /**
  * Created by Railag on 01.06.2016.
  */
-public class User { // TODO groups info
+public class User {
     private static User user;
 
+    private final static String ID_KEY = "id";
     private final static String LOGIN_KEY = "login";
     private final static String EMAIL_KEY = "email";
     private final static String TOKEN_KEY = "token";
     private final static String IMAGE_URL_KEY = "imageUrl";
+
+    private long id;
+    private String login;
+    private String email;
+    private String token;
+    private String profileImageUrl;
 
     public static User get(Context context) {
         if (user == null)
@@ -25,11 +32,8 @@ public class User { // TODO groups info
     }
 
     public static void save(UserResult result, Context context) {
-        if (result == null)
-            return;
-
-
         User user = get(context);
+        user.id = result.id;
         user.login = result.login;
         user.email = result.email;
         user.token = result.token;
@@ -37,6 +41,7 @@ public class User { // TODO groups info
 
         Utils.prefs(context)
                 .edit()
+                .putLong(ID_KEY, user.id)
                 .putString(LOGIN_KEY, user.login)
                 .putString(EMAIL_KEY, user.email)
                 .putString(TOKEN_KEY, user.token)
@@ -56,6 +61,7 @@ public class User { // TODO groups info
             return new User();
         } else {
             User user = new User();
+            user.id = prefs.getLong(ID_KEY, -1L);
             user.login = prefs.getString(LOGIN_KEY, "");
             user.email = prefs.getString(EMAIL_KEY, "");
             user.token = prefs.getString(TOKEN_KEY, "");
@@ -64,10 +70,13 @@ public class User { // TODO groups info
         }
     }
 
-    private String login;
-    private String email;
-    private String token;
-    private String profileImageUrl;
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getLogin() {
         return login;

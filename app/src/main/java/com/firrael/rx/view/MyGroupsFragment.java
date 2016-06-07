@@ -8,6 +8,7 @@ import android.view.View;
 import com.firrael.rx.GroupsAdapter;
 import com.firrael.rx.R;
 import com.firrael.rx.model.Group;
+import com.firrael.rx.model.User;
 import com.firrael.rx.presenter.MyGroupsPresenter;
 
 import java.util.List;
@@ -49,7 +50,8 @@ public class MyGroupsFragment extends BaseFragment<MyGroupsPresenter> {
 
         if (bundle == null) {
             startLoading();
-            getPresenter().request();
+            User user = User.get(getActivity());
+            getPresenter().request(user.getId());
         }
     }
 

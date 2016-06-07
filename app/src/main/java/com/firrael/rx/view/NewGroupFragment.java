@@ -5,9 +5,11 @@ import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.firrael.rx.model.CreateGroupResult;
-import com.firrael.rx.presenter.NewGroupPresenter;
 import com.firrael.rx.R;
+import com.firrael.rx.model.CreateGroupResult;
+import com.firrael.rx.model.Group;
+import com.firrael.rx.model.User;
+import com.firrael.rx.presenter.NewGroupPresenter;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -43,11 +45,25 @@ public class NewGroupFragment extends BaseFragment<NewGroupPresenter> {
     @OnClick(R.id.createGroupButton)
     void create() {
         startLoading();
-        getPresenter().request(groupNameField.getText().toString());
+        User user = User.get(getActivity());
+        getPresenter().request(groupNameField.getText().toString(), user.getId());
     }
 
     public void onSuccess(CreateGroupResult result) {
         stopLoading();
+
+        if (result.invalid()) {
+            toast(result.error);
+            return;
+        }
+
+        Group group = new Group();
+        group.setId(result.id);
+        group.setTitle(result.title);
+        group.setCreator(result.creator);
+        group.setImageUrl(result.imageUrl);
+
+        getMainActivity().toGroupCreatorScreen(group);
     }
 
     public void onError(Throwable throwable) {

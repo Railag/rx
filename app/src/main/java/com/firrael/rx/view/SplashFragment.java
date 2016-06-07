@@ -60,12 +60,16 @@ public class SplashFragment extends BaseFragment<SplashPresenter> {
     }
 
     public void onSuccess(UserResult result) {
-        toast("success login");
         stopLoading();
         if (result == null) {
             onError(new IllegalArgumentException());
             return;
         }
+        if (result.invalid()) {
+            getMainActivity().toLogin();
+            return;
+        }
+        toast("success login");
         User.save(result, getActivity());
         getMainActivity().updateNavigationMenu();
         getMainActivity().toUserLandingScreen();
