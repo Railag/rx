@@ -39,12 +39,10 @@ public class RemoveUserDialog extends Dialog {
         this.users = users;
 
         View v = LayoutInflater.from(context).inflate(R.layout.dialog_remove_user, null);
-
-        ButterKnife.bind(v, this);
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         setContentView(v);
+
+        ButterKnife.bind(this, v);
 
         getWindow().setLayout((int) Utils.dp2px(280, context), ViewGroup.LayoutParams.WRAP_CONTENT);
         getWindow().setBackgroundDrawableResource(android.R.color.transparent);

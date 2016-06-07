@@ -63,8 +63,8 @@ public interface RConnectorService {
     Observable<List<Message>> fetchMessages(@Field("group_id") long groupId);
 
     @FormUrlEncoded
-    @POST("/group_add_user")
-    Observable<AddUserResult> addUser(@Field("login") String addLogin);
+    @POST("/group/add_user")
+    Observable<AddUserResult> addUser(@Field("user_login_or_email") String loginOrEmail, @Field("group_id") long groupId);
 
     @FormUrlEncoded
     @POST("/group_remove_user")
