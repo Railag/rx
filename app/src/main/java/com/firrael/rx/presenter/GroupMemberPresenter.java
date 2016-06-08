@@ -22,6 +22,8 @@ public class GroupMemberPresenter extends BasePresenter<GroupMemberFragment> {
     String message;
     @State
     long groupId;
+    @State
+    long userId;
 
     @Override
     protected void onCreate(Bundle savedState) {
@@ -30,16 +32,17 @@ public class GroupMemberPresenter extends BasePresenter<GroupMemberFragment> {
         RConnectorService service = App.restService();
 
         restartableLatestCache(Requests.REQUEST_SEND_MESSAGE,
-                () -> service.sendMessage(groupId, message)
+                () -> service.sendMessage(groupId, userId, message)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread()),
                 GroupMemberFragment::onSuccess,
                 GroupMemberFragment::onError);
     }
 
-    public void sendMessage(String message, long groupId) {
+    public void sendMessage(String message, long groupId, long userId) {
         this.message = message;
         this.groupId = groupId;
+        this.userId = userId;
         start(REQUEST_SEND_MESSAGE);
     }
 }

@@ -13,6 +13,8 @@ import com.firrael.rx.model.AddUserResult;
 import com.firrael.rx.model.Group;
 import com.firrael.rx.model.Message;
 import com.firrael.rx.model.RemoveUserResult;
+import com.firrael.rx.model.SendMessageResult;
+import com.firrael.rx.model.User;
 import com.firrael.rx.presenter.GroupCreatorPresenter;
 
 import java.util.List;
@@ -78,8 +80,10 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
     @OnClick(R.id.sendButton)
     void sendMessage() {
         String message = sendField.getText().toString();
-        if (!TextUtils.isEmpty(message))
-            getPresenter().sendMessage(message, group.getId());
+        if (!TextUtils.isEmpty(message)) {
+            long userId = User.get(getActivity()).getId();
+            getPresenter().sendMessage(message, group.getId(), userId);
+        }
     }
 
     @OnClick(R.id.addUserButton)
@@ -119,8 +123,13 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
         return R.layout.fragment_group_creator;
     }
 
-    public void onSuccessSendMessage(List<Message> messages) {
-        adapter.setMessages(messages);
+    public void onSuccessSendMessage(SendMessageResult result) {
+        if (result.invalid())
+            toast(result.error);
+        else
+            toast(result.result);
+
+        getPresenter().fetchMessages(group.getId());
     }
 
     public void onErrorSendMessage(Throwable throwable) {

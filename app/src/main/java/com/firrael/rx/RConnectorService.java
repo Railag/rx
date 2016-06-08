@@ -9,6 +9,7 @@ import com.firrael.rx.model.ImageResult;
 import com.firrael.rx.model.Message;
 import com.firrael.rx.model.Post;
 import com.firrael.rx.model.RemoveUserResult;
+import com.firrael.rx.model.SendMessageResult;
 import com.firrael.rx.model.UserResult;
 import com.firrael.rx.view.ChatUser;
 
@@ -55,8 +56,8 @@ public interface RConnectorService {
     Observable<List<Group>> getGroups(@Field("creator") long creatorId);
 
     @FormUrlEncoded
-    @POST("/group_send_message")
-    Observable<List<Message>> sendMessage(@Field("group_id") long groupId, @Field("message") String message);
+    @POST("/group/send_message")
+    Observable<SendMessageResult> sendMessage(@Field("group_id") long groupId, @Field("user_id") long userId, @Field("text") String message);
 
     @FormUrlEncoded
     @POST("/group/fetch_messages")

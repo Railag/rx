@@ -25,6 +25,8 @@ public class GroupCreatorPresenter extends BasePresenter<GroupCreatorFragment> {
     @State
     long groupId;
     @State
+    long userId;
+    @State
     String addLogin;
     @State
     String removeLogin;
@@ -36,7 +38,7 @@ public class GroupCreatorPresenter extends BasePresenter<GroupCreatorFragment> {
         RConnectorService service = App.restService();
 
         restartableLatestCache(REQUEST_SEND_MESSAGE_CREATOR,
-                () -> service.sendMessage(groupId, message)
+                () -> service.sendMessage(groupId, userId, message)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread()),
                 GroupCreatorFragment::onSuccessSendMessage,
@@ -71,9 +73,10 @@ public class GroupCreatorPresenter extends BasePresenter<GroupCreatorFragment> {
                 GroupCreatorFragment::onErrorFetchUsers);
     }
 
-    public void sendMessage(String message, long groupId) {
+    public void sendMessage(String message, long groupId, long userId) {
         this.message = message;
         this.groupId = groupId;
+        this.userId = userId;
         start(REQUEST_SEND_MESSAGE_CREATOR);
     }
 

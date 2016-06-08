@@ -11,6 +11,8 @@ import com.firrael.rx.ChatAdapter;
 import com.firrael.rx.R;
 import com.firrael.rx.model.Group;
 import com.firrael.rx.model.Message;
+import com.firrael.rx.model.SendMessageResult;
+import com.firrael.rx.model.User;
 import com.firrael.rx.presenter.GroupMemberPresenter;
 
 import java.util.List;
@@ -72,8 +74,10 @@ public class GroupMemberFragment extends BaseFragment<GroupMemberPresenter> {
     @OnClick(R.id.sendButton)
     void sendMessage() {
         String message = sendField.getText().toString();
-        if (!TextUtils.isEmpty(message))
-            getPresenter().sendMessage(message, group.getId());
+        if (!TextUtils.isEmpty(message)) {
+            long userId = User.get(getActivity()).getId();
+            getPresenter().sendMessage(message, group.getId(), userId);
+        }
     }
 
     @Override
@@ -86,8 +90,8 @@ public class GroupMemberFragment extends BaseFragment<GroupMemberPresenter> {
         return R.layout.fragment_group_member;
     }
 
-    public void onSuccess(List<Message> messages) {
-        adapter.setMessages(messages);
+    public void onSuccess(SendMessageResult result) {
+        // TODO fetch messages
     }
 
     public void onError(Throwable throwable) {
