@@ -1,15 +1,22 @@
 package com.firrael.rx.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 
 /**
  * Created by Railag on 03.06.2016.
  */
 public class Message {
+    @SerializedName("group_id")
     private long groupId;
+    @SerializedName("user_id")
     private long userId;
+    @SerializedName("user_login")
     private String userLogin;
+    @SerializedName("user_image_url")
     private String userImageUrl;
+    @SerializedName("text")
     private String message;
     private Date date;
 

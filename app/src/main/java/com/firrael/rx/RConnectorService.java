@@ -59,7 +59,7 @@ public interface RConnectorService {
     Observable<List<Message>> sendMessage(@Field("group_id") long groupId, @Field("message") String message);
 
     @FormUrlEncoded
-    @POST("/group_fetch_messages")
+    @POST("/group/fetch_messages")
     Observable<List<Message>> fetchMessages(@Field("group_id") long groupId);
 
     @FormUrlEncoded
@@ -71,6 +71,6 @@ public interface RConnectorService {
     Observable<RemoveUserResult> removeUser(@Field("login") String removeLogin);
 
     @FormUrlEncoded
-    @POST("/group_fetch_users")
+    @POST("/group/fetch_users")
     Observable<List<ChatUser>> fetchUsers(@Field("group_id") long groupId);
 }

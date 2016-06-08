@@ -136,7 +136,10 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
     }
 
     public void onSuccessAddUser(AddUserResult result) {
-        getPresenter().fetchUsers(group.getId());
+        if (result.invalid())
+            toast(result.error);
+        else
+            getPresenter().fetchUsers(group.getId());
     }
 
     public void onErrorAddUser(Throwable throwable) {
@@ -144,7 +147,10 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
     }
 
     public void onSuccessRemoveUser(RemoveUserResult result) {
-        getPresenter().fetchUsers(group.getId());
+        if (result.invalid())
+            toast(result.error);
+        else
+            getPresenter().fetchUsers(group.getId());
     }
 
     public void onErrorRemoveUser(Throwable throwable) {

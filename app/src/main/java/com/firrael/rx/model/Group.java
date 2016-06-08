@@ -3,6 +3,8 @@ package com.firrael.rx.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Railag on 02.06.2016.
  */
@@ -10,6 +12,7 @@ public class Group implements Parcelable {
     private long id;
     private String title;
     private String imageUrl;
+    @SerializedName("user_id")
     private long creator;
 
     public Group() {
