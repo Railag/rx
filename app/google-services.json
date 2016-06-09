@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "336637076850",
+    "firebase_url": "https://project-2621834526458390399.firebaseio.com",
+    "project_id": "project-2621834526458390399",
+    "storage_bucket": "project-2621834526458390399.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:336637076850:android:0960f83a86f453b9",
+        "android_client_info": {
+          "package_name": "com.firrael.rx"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "336637076850-78ppgk6f3j023kr0nkt1d85vj5g2m6p6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIaz5C9ertmcJ9DldIVMj7eTTsR6legRA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

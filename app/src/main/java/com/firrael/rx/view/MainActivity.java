@@ -30,6 +30,8 @@ import com.firrael.rx.model.Group;
 import com.firrael.rx.model.ImageResult;
 import com.firrael.rx.model.User;
 import com.firrael.rx.presenter.MainPresenter;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import butterknife.BindView;
@@ -63,6 +65,12 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        // TODO check for google play services
+        int code = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
+        if (code != ConnectionResult.SUCCESS) {
+            GoogleApiAvailability.getInstance().showErrorDialogFragment(this, code, 1);
+        }
 
         setSupportActionBar(toolbar);
 
