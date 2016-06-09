@@ -59,7 +59,7 @@ public class GroupCreatorPresenter extends BasePresenter<GroupCreatorFragment> {
                 GroupCreatorFragment::onErrorAddUser);
 
         restartableLatestCache(REQUEST_REMOVE_USER,
-                () -> service.removeUser(removeLogin)
+                () -> service.removeUser(removeLogin, groupId)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread()),
                 GroupCreatorFragment::onSuccessRemoveUser,

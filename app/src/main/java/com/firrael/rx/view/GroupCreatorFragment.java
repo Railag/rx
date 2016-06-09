@@ -20,6 +20,7 @@ import com.firrael.rx.presenter.GroupCreatorPresenter;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import nucleus.factory.RequiresPresenter;
@@ -38,6 +39,9 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
     RecyclerView chatList;
     @BindView(R.id.sendField)
     EditText sendField;
+    @BindViews({R.id.addUserButton, R.id.removeUserButton, R.id.sendPNButton, R.id.editGroupButton})
+    View[] viewsToCollapse;
+
 
     ChatAdapter adapter;
 
@@ -110,6 +114,9 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
 
     @OnClick(R.id.collapseButtonsButton)
     void collapseButtons() {
+        int visibility = viewsToCollapse[0].getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
+        for (View v : viewsToCollapse)
+            v.setVisibility(visibility);
         // TODO out of scope (hide all creator buttons, convert UI into member group UI + expand buttons button)
     }
 
@@ -147,8 +154,10 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
     public void onSuccessAddUser(AddUserResult result) {
         if (result.invalid())
             toast(result.error);
-        else
+        else {
+            toast(result.result);
             getPresenter().fetchUsers(group.getId());
+        }
     }
 
     public void onErrorAddUser(Throwable throwable) {
@@ -158,8 +167,10 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
     public void onSuccessRemoveUser(RemoveUserResult result) {
         if (result.invalid())
             toast(result.error);
-        else
+        else {
+            toast(result.result);
             getPresenter().fetchUsers(group.getId());
+        }
     }
 
     public void onErrorRemoveUser(Throwable throwable) {
