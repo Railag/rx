@@ -15,6 +15,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,8 +28,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.firrael.rx.App;
 import com.firrael.rx.R;
+import com.firrael.rx.RConnectorService;
 import com.firrael.rx.model.Group;
 import com.firrael.rx.model.ImageResult;
+import com.firrael.rx.model.SendFCMTokenResult;
 import com.firrael.rx.model.User;
 import com.firrael.rx.presenter.MainPresenter;
 import com.google.android.gms.common.ConnectionResult;
@@ -38,12 +42,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import nucleus.factory.RequiresPresenter;
 import nucleus.view.NucleusAppCompatActivity;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import static butterknife.ButterKnife.findById;
 
 @RequiresPresenter(MainPresenter.class)
 public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private final static String TAG = MainActivity.class.getSimpleName();
 
     private static final String TAG_MAIN = "mainTag";
     private static final int PHOTO_CODE = 1;
@@ -91,6 +99,19 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
         });
 
         App.setMainActivity(this);
+
+        if (!User.isFcmSaved(this)) {
+            User user = User.get(this);
+            String fcmToken = user.getFcmToken(this);
+            if (!TextUtils.isEmpty(fcmToken)) {
+                RConnectorService service = App.restService();
+
+                service.sendFCMToken(user.getId(), fcmToken)
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::onFcmTokenSuccess, this::onFcmTokenError);
+            }
+        }
 
         toSplash();
     }
@@ -257,6 +278,20 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
     }
 
     public void onError(Throwable throwable) {
+        throwable.printStackTrace();
+    }
+
+    public void onFcmTokenSuccess(SendFCMTokenResult result) {
+        if (result.invalid()) {
+            Log.e(TAG, result.error);
+        }
+
+        Log.i(TAG, result.result);
+
+        User.fcmSaved(getBaseContext());
+    }
+
+    public void onFcmTokenError(Throwable throwable) {
         throwable.printStackTrace();
     }
 }

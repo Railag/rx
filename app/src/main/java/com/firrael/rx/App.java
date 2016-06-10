@@ -21,7 +21,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by firrael on 25.05.2016.
  */
 public class App extends Application {
-    private final static String API_ENDPOINT = "http://10.0.3.2:3000"; //http://jsonplaceholder.typicode.com";
 
     public static final String PREFS = "prefs";
 
@@ -57,7 +56,7 @@ public class App extends Application {
             Gson gson = new Gson();
 
             api = new Retrofit.Builder()
-                    .baseUrl(API_ENDPOINT)
+                    .baseUrl(RConnectorService.API_ENDPOINT)
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())

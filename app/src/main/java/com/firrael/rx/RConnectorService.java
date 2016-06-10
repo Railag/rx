@@ -7,8 +7,8 @@ import com.firrael.rx.model.CreateGroupResult;
 import com.firrael.rx.model.Group;
 import com.firrael.rx.model.ImageResult;
 import com.firrael.rx.model.Message;
-import com.firrael.rx.model.Post;
 import com.firrael.rx.model.RemoveUserResult;
+import com.firrael.rx.model.SendFCMTokenResult;
 import com.firrael.rx.model.SendMessageResult;
 import com.firrael.rx.model.UserResult;
 import com.firrael.rx.view.ChatUser;
@@ -17,7 +17,6 @@ import java.util.List;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.GET;
 import retrofit2.http.POST;
 import rx.Observable;
 
@@ -25,8 +24,8 @@ import rx.Observable;
  * Created by firrael on 25.05.2016.
  */
 public interface RConnectorService {
-    @GET("/posts")
-    Observable<List<Post>> getPosts();
+    //String API_ENDPOINT = "http://127.0.0.1:3000";
+    String API_ENDPOINT = "http://10.0.3.2:3000";
 
     @FormUrlEncoded
     @POST("/user/login")
@@ -74,4 +73,8 @@ public interface RConnectorService {
     @FormUrlEncoded
     @POST("/group/fetch_users")
     Observable<List<ChatUser>> fetchUsers(@Field("group_id") long groupId);
+
+    @FormUrlEncoded
+    @POST("/user/fcm_token")
+    Observable<SendFCMTokenResult> sendFCMToken(@Field("user_id") long userId, @Field("fcm_token") String fcmToken);
 }

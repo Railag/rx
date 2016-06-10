@@ -17,12 +17,15 @@ public class User {
     private final static String EMAIL_KEY = "email";
     private final static String TOKEN_KEY = "token";
     private final static String IMAGE_URL_KEY = "imageUrl";
+    private final static String FCM_TOKEN_KEY = "fcm_token";
+    private final static String FCM_SAVED_KEY = "fcm_saved";
 
     private long id;
     private String login;
     private String email;
     private String token;
     private String profileImageUrl;
+    private String fcmToken;
 
     public static User get(Context context) {
         if (user == null)
@@ -66,6 +69,7 @@ public class User {
             user.email = prefs.getString(EMAIL_KEY, "");
             user.token = prefs.getString(TOKEN_KEY, "");
             user.profileImageUrl = prefs.getString(IMAGE_URL_KEY, "");
+            user.fcmToken = prefs.getString(FCM_TOKEN_KEY, "");
             return user;
         }
     }
@@ -108,5 +112,25 @@ public class User {
 
     public void setProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
+    }
+
+    public String getFcmToken(Context context) {
+        if (TextUtils.isEmpty(fcmToken))
+            fcmToken = Utils.prefs(context).getString(FCM_TOKEN_KEY, "");
+
+        return fcmToken;
+    }
+
+    public static void saveFcmToken(String fcmToken, Context context) {
+        user.fcmToken = fcmToken;
+        Utils.prefs(context).edit().putString(FCM_TOKEN_KEY, fcmToken).commit();
+    }
+
+    public static void fcmSaved(Context context) {
+        Utils.prefs(context).edit().putBoolean(FCM_SAVED_KEY, true).commit();
+    }
+
+    public static boolean isFcmSaved(Context context) {
+        return Utils.prefs(context).getBoolean(FCM_SAVED_KEY, false);
     }
 }

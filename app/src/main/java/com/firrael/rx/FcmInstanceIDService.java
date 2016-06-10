@@ -1,9 +1,15 @@
 package com.firrael.rx;
 
+import android.content.Context;
 import android.util.Log;
 
+import com.firrael.rx.model.SendFCMTokenResult;
+import com.firrael.rx.model.User;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Railag on 09.06.2016.
@@ -17,7 +23,29 @@ public class FcmInstanceIDService extends FirebaseInstanceIdService {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "Refreshed token: " + refreshedToken);
 
-        // TODO: Implement this method to send any registration to your app's servers.
-        //sendRegistrationToServer(refreshedToken);
+        RConnectorService service = App.restService();
+        Context context = getBaseContext();
+        User user = User.get(context);
+
+        User.saveFcmToken(refreshedToken, context);
+
+        service.sendFCMToken(user.getId(), refreshedToken)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::onSuccess, this::onError);
+    }
+
+    private void onSuccess(SendFCMTokenResult result) {
+        if (result.invalid()) {
+            Log.e(TAG, result.error);
+        }
+
+        Log.i(TAG, result.result);
+
+        User.fcmSaved(getBaseContext());
+    }
+
+    private void onError(Throwable throwable) {
+        throwable.printStackTrace();
     }
 }
