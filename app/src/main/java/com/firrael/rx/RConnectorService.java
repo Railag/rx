@@ -10,6 +10,7 @@ import com.firrael.rx.model.Message;
 import com.firrael.rx.model.RemoveUserResult;
 import com.firrael.rx.model.SendFCMTokenResult;
 import com.firrael.rx.model.SendMessageResult;
+import com.firrael.rx.model.SendPNResult;
 import com.firrael.rx.model.UserResult;
 import com.firrael.rx.view.ChatUser;
 
@@ -77,4 +78,8 @@ public interface RConnectorService {
     @FormUrlEncoded
     @POST("/user/fcm_token")
     Observable<SendFCMTokenResult> sendFCMToken(@Field("user_id") long userId, @Field("fcm_token") String fcmToken);
+
+    @FormUrlEncoded
+    @POST("/user/send_pn")
+    Observable<SendPNResult> sendPN(@Field("user_id") long userId, @Field("title") String title, @Field("text") String text);
 }

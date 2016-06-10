@@ -16,4 +16,5 @@ public class Requests {
     public static final int REQUEST_ADD_USER = 10;
     public static final int REQUEST_REMOVE_USER = 11;
     public static final int REQUEST_FETCH_USERS = 12;
+    public static final int REQUEST_SEND_PN = 13;
 }

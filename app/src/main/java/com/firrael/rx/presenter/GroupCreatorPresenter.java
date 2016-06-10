@@ -15,6 +15,7 @@ import static com.firrael.rx.Requests.REQUEST_FETCH_MESSAGES;
 import static com.firrael.rx.Requests.REQUEST_FETCH_USERS;
 import static com.firrael.rx.Requests.REQUEST_REMOVE_USER;
 import static com.firrael.rx.Requests.REQUEST_SEND_MESSAGE_CREATOR;
+import static com.firrael.rx.Requests.REQUEST_SEND_PN;
 
 /**
  * Created by Railag on 03.06.2016.
@@ -30,6 +31,11 @@ public class GroupCreatorPresenter extends BasePresenter<GroupCreatorFragment> {
     String addLogin;
     @State
     String removeLogin;
+
+    @State
+    String pnTitle;
+    @State
+    String pnText;
 
     @Override
     protected void onCreate(Bundle savedState) {
@@ -71,6 +77,13 @@ public class GroupCreatorPresenter extends BasePresenter<GroupCreatorFragment> {
                         .observeOn(AndroidSchedulers.mainThread()),
                 GroupCreatorFragment::onSuccessFetchUsers,
                 GroupCreatorFragment::onErrorFetchUsers);
+
+        restartableLatestCache(REQUEST_SEND_PN,
+                () -> service.sendPN(userId, pnTitle, pnText)
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread()),
+                GroupCreatorFragment::onSuccessSendPN,
+                GroupCreatorFragment::onErrorSendPN);
     }
 
     public void sendMessage(String message, long groupId, long userId) {
@@ -99,4 +112,11 @@ public class GroupCreatorPresenter extends BasePresenter<GroupCreatorFragment> {
         this.groupId = groupId;
         start(REQUEST_FETCH_USERS);
     }
+
+    public void sendPN(String title, String text) {
+        this.pnTitle = title;
+        this.pnText = text;
+        start(REQUEST_SEND_PN);
+    }
+
 }

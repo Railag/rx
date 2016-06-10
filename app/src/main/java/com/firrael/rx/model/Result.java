@@ -5,6 +5,7 @@ package com.firrael.rx.model;
  */
 public class Result {
     public String error;
+    public String result;
 
     public boolean invalid() {
         return error != null;

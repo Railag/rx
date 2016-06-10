@@ -34,4 +34,8 @@
     <string name="add">Add</string>
     <string name="user_login_email">User login / email</string>
     <string name="remove">Remove</string>
+    <string name="notification_title">Notification title</string>
+    <string name="notification_text">Notification text</string>
+    <string name="pickImageFromGallery">Pick Image from Gallery</string>
+    <string name="send_notification">Send notification</string>
 </resources>

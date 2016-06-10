@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/pnTitleField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/notification_title"
+        android:inputType="textAutoComplete" />
+
+    <EditText
+        android:id="@+id/pnTextField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/notification_text"
+        android:inputType="textMultiLine" />
+
+    <ImageView
+        android:id="@+id/pnImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/common_full_open_on_phone" />
+
+    <Button
+        android:id="@+id/pnPickImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pickImageFromGallery" />
+
+    <Button
+        android:id="@+id/pnSendButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/send_notification" />
+
+</LinearLayout>

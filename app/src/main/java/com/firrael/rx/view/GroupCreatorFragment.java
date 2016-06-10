@@ -14,6 +14,7 @@ import com.firrael.rx.model.Group;
 import com.firrael.rx.model.Message;
 import com.firrael.rx.model.RemoveUserResult;
 import com.firrael.rx.model.SendMessageResult;
+import com.firrael.rx.model.SendPNResult;
 import com.firrael.rx.model.User;
 import com.firrael.rx.presenter.GroupCreatorPresenter;
 
@@ -109,7 +110,8 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
 
     @OnClick(R.id.sendPNButton)
     void sendPN() {
-        // TODO show dialog with PN content construction
+        PNDialog dialog = new PNDialog(getActivity(), getPresenter());
+        dialog.show();
     }
 
     @OnClick(R.id.collapseButtonsButton)
@@ -182,6 +184,19 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
     }
 
     public void onErrorFetchUsers(Throwable throwable) {
+        throwable.printStackTrace();
+    }
+
+    public void onSuccessSendPN(SendPNResult result) {
+        if (result.invalid()) {
+            toast(result.error);
+            return;
+        }
+
+        toast(result.result);
+    }
+
+    public void onErrorSendPN(Throwable throwable) {
         throwable.printStackTrace();
     }
 }
