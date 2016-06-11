@@ -73,8 +73,11 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
         adapter = new ChatAdapter();
         chatList.setAdapter(adapter);
 
-        getPresenter().fetchUsers(group.getId());
-        getPresenter().fetchMessages(group.getId());
+        User user = User.get(getActivity());
+
+        getPresenter().initialize(group.getId(), user.getId());
+        getPresenter().fetchUsers();
+        getPresenter().fetchMessages();
     }
 
     @OnTextChanged(R.id.sendField)
@@ -87,7 +90,7 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
         String message = sendField.getText().toString();
         if (!TextUtils.isEmpty(message)) {
             long userId = User.get(getActivity()).getId();
-            getPresenter().sendMessage(message, group.getId(), userId);
+            getPresenter().sendMessage(message);
         }
     }
 
@@ -138,7 +141,7 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
         else
             toast(result.result);
 
-        getPresenter().fetchMessages(group.getId());
+        getPresenter().fetchMessages();
     }
 
     public void onErrorSendMessage(Throwable throwable) {
@@ -158,7 +161,7 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
             toast(result.error);
         else {
             toast(result.result);
-            getPresenter().fetchUsers(group.getId());
+            getPresenter().fetchUsers();
         }
     }
 
@@ -171,7 +174,7 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
             toast(result.error);
         else {
             toast(result.result);
-            getPresenter().fetchUsers(group.getId());
+            getPresenter().fetchUsers();
         }
     }
 

@@ -86,15 +86,12 @@ public class GroupCreatorPresenter extends BasePresenter<GroupCreatorFragment> {
                 GroupCreatorFragment::onErrorSendPN);
     }
 
-    public void sendMessage(String message, long groupId, long userId) {
+    public void sendMessage(String message) {
         this.message = message;
-        this.groupId = groupId;
-        this.userId = userId;
         start(REQUEST_SEND_MESSAGE_CREATOR);
     }
 
-    public void fetchMessages(long groupId) {
-        this.groupId = groupId;
+    public void fetchMessages() {
         start(REQUEST_FETCH_MESSAGES);
     }
 
@@ -108,8 +105,7 @@ public class GroupCreatorPresenter extends BasePresenter<GroupCreatorFragment> {
         start(REQUEST_REMOVE_USER);
     }
 
-    public void fetchUsers(long groupId) {
-        this.groupId = groupId;
+    public void fetchUsers() {
         start(REQUEST_FETCH_USERS);
     }
 
@@ -119,4 +115,8 @@ public class GroupCreatorPresenter extends BasePresenter<GroupCreatorFragment> {
         start(REQUEST_SEND_PN);
     }
 
+    public void initialize(long groupId, long userId) {
+        this.groupId = groupId;
+        this.userId = userId;
+    }
 }

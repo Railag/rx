@@ -8,6 +8,7 @@ import android.view.View;
 import com.firrael.rx.GroupsAdapter;
 import com.firrael.rx.R;
 import com.firrael.rx.model.Group;
+import com.firrael.rx.model.GroupFetchResult;
 import com.firrael.rx.model.User;
 import com.firrael.rx.presenter.MyGroupsPresenter;
 
@@ -65,8 +66,14 @@ public class MyGroupsFragment extends BaseFragment<MyGroupsPresenter> {
         return R.layout.fragment_my_groups;
     }
 
-    public void onSuccess(List<Group> groups) {
+    public void onSuccess(GroupFetchResult result) {
         stopLoading();
+        if (result.invalid()) {
+            toast(result.error);
+            return;
+        }
+
+        List<Group> groups = result.groups;
         adapter.setGroups(groups);
     }
 
