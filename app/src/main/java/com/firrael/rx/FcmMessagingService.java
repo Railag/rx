@@ -13,6 +13,8 @@ import com.firrael.rx.view.MainActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Map;
+
 /**
  * Created by Railag on 09.06.2016.
  */
@@ -23,9 +25,18 @@ public class FcmMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         RemoteMessage.Notification notification = remoteMessage.getNotification();
-        Log.i(TAG, notification.getBody());
+        Map<String, String> data = remoteMessage.getData();
+        if (data != null) {
+            for (Map.Entry<String, String> entry : data.entrySet()) {
+                Log.d(TAG, entry.getKey() + ": " + entry.getValue());
+            }
+        }
 
-        sendPN(notification);
+
+        if (notification != null) {
+            Log.i(TAG, notification.getBody());
+            sendPN(notification);
+        }
     }
 
     private void sendPN(RemoteMessage.Notification notification) {

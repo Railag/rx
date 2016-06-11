@@ -21,7 +21,9 @@ public class FcmInstanceIDService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+        String id = FirebaseInstanceId.getInstance().getId();
         Log.d(TAG, "Refreshed token: " + refreshedToken);
+        Log.d(TAG, "Id: " + id);
 
         RConnectorService service = App.restService();
         Context context = getBaseContext();
@@ -38,6 +40,7 @@ public class FcmInstanceIDService extends FirebaseInstanceIdService {
     private void onSuccess(SendFCMTokenResult result) {
         if (result.invalid()) {
             Log.e(TAG, result.error);
+            return;
         }
 
         Log.i(TAG, result.result);

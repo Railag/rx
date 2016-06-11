@@ -49,7 +49,7 @@ public interface RConnectorService {
 
     @FormUrlEncoded
     @POST("/group")
-    Observable<CreateGroupResult> createGroup(@Field("title") String groupName, @Field("creator") long creatorId);
+    Observable<CreateGroupResult> createGroup(@Field("title") String groupName, @Field("user_id") long creatorId);
 
     @FormUrlEncoded
     @POST("/group/fetch")
