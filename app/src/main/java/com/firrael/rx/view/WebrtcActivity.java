@@ -36,6 +36,7 @@ public class WebrtcActivity extends NucleusAppCompatActivity<WebrtcPresenter> im
     private static final String TAG = WebrtcActivity.class.getSimpleName();
 
     private final static int REMOTE_PEERS = 4;
+    private boolean[] presentPeers = new boolean[REMOTE_PEERS];
 
     private final static int VIDEO_CALL_SENT = 666;
     private static final String VIDEO_CODEC_VP9 = "VP9";
@@ -51,12 +52,8 @@ public class WebrtcActivity extends NucleusAppCompatActivity<WebrtcPresenter> im
     private static final int LOCAL_WIDTH_CONNECTED = 25;
     private static final int LOCAL_HEIGHT_CONNECTED = 25;
     // Remote video screen position
-    private static final int REMOTE_X = 0;
-    private static final int REMOTE_Y = 0;
     private static final int REMOTE_WIDTH_MODIFIER = 25;
     private static final int REMOTE_HEIGHT_MODIFIER = 25;
-    private static final int REMOTE_WIDTH = 100;
-    private static final int REMOTE_HEIGHT = 100;
     private VideoRendererGui.ScalingType scalingType = VideoRendererGui.ScalingType.SCALE_ASPECT_FILL;
     private VideoRenderer.Callbacks localRender;
     private VideoRenderer.Callbacks remoteRenders[];
@@ -178,6 +175,9 @@ public class WebrtcActivity extends NucleusAppCompatActivity<WebrtcPresenter> im
 
         Log.i(TAG, socketAddress.replace("10.0.3.2", "localhost") + callId);
         startCam();
+
+        // TODO send callerId to rails, then send PNs to other group members with callerId link
+
     }
 
     @Override
@@ -224,6 +224,7 @@ public class WebrtcActivity extends NucleusAppCompatActivity<WebrtcPresenter> im
         Log.i(TAG, "#onAddRemoteStream");
 
         endpoints++;
+        presentPeers[endPoint - 1] = true;
 
         List<VideoTrack> videoTracks = remoteStream.videoTracks;
         if (videoTracks != null && videoTracks.size() > 0) {
@@ -241,7 +242,10 @@ public class WebrtcActivity extends NucleusAppCompatActivity<WebrtcPresenter> im
     private void refreshRemotes() {
         int sizeX = getRemoteXSize();
         int sizeY = getRemoteYSize(sizeX);
-        for (int endPoint = 1; endPoint < endpoints + 1; endPoint++) {
+        for (int endPoint = 1; endPoint < REMOTE_PEERS + 1; endPoint++) {
+            if (!presentPeers[endPoint - 1])
+                continue;
+
             int remoteX = getRemoteXForEndpoint(endPoint);
             int remoteY = getRemoteYForEndpoint(endPoint);
 
@@ -283,10 +287,25 @@ public class WebrtcActivity extends NucleusAppCompatActivity<WebrtcPresenter> im
 
         endpoints--;
 
-        VideoRendererGui.update(localRender,
-                LOCAL_X_CONNECTING, LOCAL_Y_CONNECTING,
-                LOCAL_WIDTH_CONNECTING, LOCAL_HEIGHT_CONNECTING,
-                scalingType);
+        presentPeers[endPoint - 1] = false;
+
+        // TODO update endpoints array
+
+        VideoRendererGui.update(remoteRenders[endPoint - 1],
+                0, 0,
+                0, 0, scalingType);
+
+        if (endpoints == 0) {
+            VideoRendererGui.update(localRender,
+                    LOCAL_X_CONNECTING, LOCAL_Y_CONNECTING,
+                    LOCAL_WIDTH_CONNECTING, LOCAL_HEIGHT_CONNECTING,
+                    scalingType);
+        } else if (endpoints == 3) {
+            VideoRendererGui.update(localRender,
+                    getRemoteXForEndpoint(endPoint + 1), getRemoteYForEndpoint(endPoint + 1),
+                    50, 50,
+                    scalingType);
+        }
 
         refreshRemotes();
     }
@@ -324,5 +343,4 @@ public class WebrtcActivity extends NucleusAppCompatActivity<WebrtcPresenter> im
                 return -1;
         }
     }
-
 }
