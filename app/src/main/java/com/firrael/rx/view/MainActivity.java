@@ -205,7 +205,7 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
         loading.setVisibility(View.GONE);
     }
 
-    public <T extends Fragment> void setFragment(final T fragment) {
+    private <T extends Fragment> void setFragment(final T fragment) {
         runOnUiThread(() -> {
             final FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
@@ -248,7 +248,10 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
         setFragment(GroupCreatorFragment.newInstance(group));
     }
 
-    ;
+    public void toWebrtcScreen() {
+        Intent intent = new Intent(this, WebrtcActivity.class);
+        startActivity(intent);
+    }
 
     public void updateNavigationMenu() {
         View headerView = navigationView.getHeaderView(0);

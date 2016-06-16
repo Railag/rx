@@ -38,4 +38,8 @@
     <string name="notification_text">Notification text</string>
     <string name="pickImageFromGallery">Pick Image from Gallery</string>
     <string name="send_notification">Send notification</string>
+    <string name="calling">Calling</string>
+    <string name="start_call">Start call</string>
+    <string name="webrtc">Webrtc</string>
+    <string name="webrtchost">http://10.0.3.2:3001/</string>
 </resources>

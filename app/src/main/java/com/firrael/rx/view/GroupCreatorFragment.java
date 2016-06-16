@@ -48,6 +48,7 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
 
     List<ChatUser> groupUsers;
 
+
     public static GroupCreatorFragment newInstance(Group group) {
 
         Bundle args = new Bundle();
@@ -89,7 +90,6 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
     void sendMessage() {
         String message = sendField.getText().toString();
         if (!TextUtils.isEmpty(message)) {
-            long userId = User.get(getActivity()).getId();
             getPresenter().sendMessage(message);
         }
     }
@@ -109,6 +109,11 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
     @OnClick(R.id.editGroupButton)
     void editGroup() {
         // TODO out of scope (edit group name, group image dialog)
+    }
+
+    @OnClick(R.id.startCallButton)
+    void startCall() {
+        getMainActivity().toWebrtcScreen();
     }
 
     @OnClick(R.id.sendPNButton)

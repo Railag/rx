@@ -79,7 +79,7 @@ public class GroupCreatorPresenter extends BasePresenter<GroupCreatorFragment> {
                 GroupCreatorFragment::onErrorFetchUsers);
 
         restartableLatestCache(REQUEST_SEND_PN,
-                () -> service.sendPN(userId, pnTitle, pnText)
+                () -> service.sendPNToGroup(groupId, pnTitle, pnText)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread()),
                 GroupCreatorFragment::onSuccessSendPN,
@@ -109,7 +109,7 @@ public class GroupCreatorPresenter extends BasePresenter<GroupCreatorFragment> {
         start(REQUEST_FETCH_USERS);
     }
 
-    public void sendPN(String title, String text) {
+    public void sendPNToGroup(String title, String text) {
         this.pnTitle = title;
         this.pnText = text;
         start(REQUEST_SEND_PN);

@@ -79,7 +79,12 @@ public interface RConnectorService {
     @POST("/user/fcm_token")
     Observable<SendFCMTokenResult> sendFCMToken(@Field("user_id") long userId, @Field("fcm_token") String fcmToken);
 
+    // TODO for testing
     @FormUrlEncoded
-    @POST("/user/send_pn")
-    Observable<SendPNResult> sendPN(@Field("user_id") long userId, @Field("title") String title, @Field("text") String text);
+    @POST("/user/send_pns_to_everyone")
+    Observable<SendPNResult> sendPNToEveryone(@Field("user_id") long userId, @Field("title") String title, @Field("text") String text);
+
+    @FormUrlEncoded
+    @POST("/user/send_pns_to_group")
+    Observable<SendPNResult> sendPNToGroup(@Field("group_id") long groupId, @Field("title") String title, @Field("text") String text);
 }

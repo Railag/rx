@@ -73,6 +73,14 @@
                 android:text="@string/send_pn" />
 
             <Button
+                android:id="@+id/startCallButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:padding="10dp"
+                android:text="@string/start_call" />
+
+            <Button
                 android:id="@+id/collapseButtonsButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

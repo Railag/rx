@@ -59,7 +59,7 @@ public class PNDialog extends Dialog {
         String text = textField.getText().toString();
         // TODO send image, send file
         if (!TextUtils.isEmpty(title)) {
-            presenter.sendPN(title, text);
+            presenter.sendPNToGroup(title, text);
             dismiss();
         }
     }
