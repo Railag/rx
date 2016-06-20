@@ -15,6 +15,7 @@ import com.firrael.rx.model.Message;
 import com.firrael.rx.model.RemoveUserResult;
 import com.firrael.rx.model.SendMessageResult;
 import com.firrael.rx.model.SendPNResult;
+import com.firrael.rx.model.StartCallResult;
 import com.firrael.rx.model.User;
 import com.firrael.rx.presenter.GroupCreatorPresenter;
 
@@ -113,7 +114,8 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
 
     @OnClick(R.id.startCallButton)
     void startCall() {
-        getMainActivity().toWebrtcScreen();
+        startLoading();
+        getPresenter().startCall();
     }
 
     @OnClick(R.id.sendPNButton)
@@ -205,6 +207,23 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
     }
 
     public void onErrorSendPN(Throwable throwable) {
+        throwable.printStackTrace();
+    }
+
+    public void onSuccessStartCall(StartCallResult result) {
+        stopLoading();
+
+        if (result.invalid()) {
+            toast(result.error);
+            return;
+        }
+
+        String host = result.host;
+        getMainActivity().toWebrtcScreen(host);
+    }
+
+    public void onErrorStartCall(Throwable throwable) {
+        stopLoading();
         throwable.printStackTrace();
     }
 }

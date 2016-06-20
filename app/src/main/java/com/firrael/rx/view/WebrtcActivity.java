@@ -10,6 +10,8 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.firrael.rx.R;
+import com.firrael.rx.model.InviteToCallResult;
+import com.firrael.rx.model.User;
 import com.firrael.rx.presenter.WebrtcPresenter;
 
 import org.json.JSONException;
@@ -34,6 +36,8 @@ import nucleus.view.NucleusAppCompatActivity;
 public class WebrtcActivity extends NucleusAppCompatActivity<WebrtcPresenter> implements WebRtcClient.RtcListener {
 
     private static final String TAG = WebrtcActivity.class.getSimpleName();
+
+    public final static String HOST = "host";
 
     private final static int REMOTE_PEERS = 4;
     private boolean[] presentPeers = new boolean[REMOTE_PEERS];
@@ -80,7 +84,10 @@ public class WebrtcActivity extends NucleusAppCompatActivity<WebrtcPresenter> im
         setContentView(R.layout.activity_webrtc);
         ButterKnife.bind(this);
 
-        socketAddress = getString(R.string.webrtchost);
+        final Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(HOST)) {
+            socketAddress = intent.getStringExtra(HOST);//getString(R.string.webrtchost);
+        }
 
         vsv.setPreserveEGLContextOnPause(true);
         vsv.setKeepScreenOn(true);
@@ -93,7 +100,7 @@ public class WebrtcActivity extends NucleusAppCompatActivity<WebrtcPresenter> im
                 LOCAL_X_CONNECTING, LOCAL_Y_CONNECTING,
                 LOCAL_WIDTH_CONNECTING, LOCAL_HEIGHT_CONNECTING, scalingType, true);
 
-        final Intent intent = getIntent();
+        //    final Intent intent = getIntent();
         final String action = intent.getAction();
 
         if (Intent.ACTION_VIEW.equals(action)) {
@@ -174,10 +181,10 @@ public class WebrtcActivity extends NucleusAppCompatActivity<WebrtcPresenter> im
         Log.i(TAG, "#Call");
 
         Log.i(TAG, socketAddress.replace("10.0.3.2", "localhost") + callId);
-        startCam();
+        //    startCam();
 
-        // TODO send callerId to rails, then send PNs to other group members with callerId link
-
+        User user = User.get(this);
+        getPresenter().inviteToCall(user.getId(), socketAddress, callId);
     }
 
     @Override
@@ -282,27 +289,26 @@ public class WebrtcActivity extends NucleusAppCompatActivity<WebrtcPresenter> im
     }
 
     @Override
-    public void onRemoveRemoteStream(int endPoint) {
+    public void onRemoveRemoteStream(int remoteEndpoint) { // remote endpoints (0-3)
         Log.i(TAG, "#onRemoveRemoteStream");
 
         endpoints--;
 
-        presentPeers[endPoint - 1] = false;
+        presentPeers[remoteEndpoint] = false;
 
-        // TODO update endpoints array
-
-        VideoRendererGui.update(remoteRenders[endPoint - 1],
+        VideoRendererGui.update(remoteRenders[remoteEndpoint],
                 0, 0,
                 0, 0, scalingType);
 
         if (endpoints == 0) {
-            VideoRendererGui.update(localRender,
+            /*VideoRendererGui.update(localRender,
                     LOCAL_X_CONNECTING, LOCAL_Y_CONNECTING,
                     LOCAL_WIDTH_CONNECTING, LOCAL_HEIGHT_CONNECTING,
-                    scalingType);
+                    scalingType);*/
+            finish();
         } else if (endpoints == 3) {
             VideoRendererGui.update(localRender,
-                    getRemoteXForEndpoint(endPoint + 1), getRemoteYForEndpoint(endPoint + 1),
+                    getRemoteXForEndpoint(remoteEndpoint + 1), getRemoteYForEndpoint(remoteEndpoint + 1),
                     50, 50,
                     scalingType);
         }
@@ -342,5 +348,19 @@ public class WebrtcActivity extends NucleusAppCompatActivity<WebrtcPresenter> im
             default:
                 return -1;
         }
+    }
+
+    public void onSuccessInviteCall(InviteToCallResult result) {
+        if (result.invalid()) {
+            Toast.makeText(this, result.error, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Toast.makeText(this, result.result, Toast.LENGTH_LONG).show();
+        startCam();
+    }
+
+    public void onErrorInviteCall(Throwable throwable) {
+        throwable.printStackTrace();
     }
 }

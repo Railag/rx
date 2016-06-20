@@ -248,8 +248,9 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
         setFragment(GroupCreatorFragment.newInstance(group));
     }
 
-    public void toWebrtcScreen() {
+    public void toWebrtcScreen(String host) {
         Intent intent = new Intent(this, WebrtcActivity.class);
+        intent.putExtra(WebrtcActivity.HOST, host);
         startActivity(intent);
     }
 

@@ -16,6 +16,7 @@ import static com.firrael.rx.Requests.REQUEST_FETCH_USERS;
 import static com.firrael.rx.Requests.REQUEST_REMOVE_USER;
 import static com.firrael.rx.Requests.REQUEST_SEND_MESSAGE_CREATOR;
 import static com.firrael.rx.Requests.REQUEST_SEND_PN;
+import static com.firrael.rx.Requests.REQUEST_START_CALL;
 
 /**
  * Created by Railag on 03.06.2016.
@@ -84,6 +85,13 @@ public class GroupCreatorPresenter extends BasePresenter<GroupCreatorFragment> {
                         .observeOn(AndroidSchedulers.mainThread()),
                 GroupCreatorFragment::onSuccessSendPN,
                 GroupCreatorFragment::onErrorSendPN);
+
+        restartableLatestCache(REQUEST_START_CALL,
+                () -> service.startCall(userId)
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread()),
+                GroupCreatorFragment::onSuccessStartCall,
+                GroupCreatorFragment::onErrorStartCall);
     }
 
     public void sendMessage(String message) {
@@ -113,6 +121,10 @@ public class GroupCreatorPresenter extends BasePresenter<GroupCreatorFragment> {
         this.pnTitle = title;
         this.pnText = text;
         start(REQUEST_SEND_PN);
+    }
+
+    public void startCall() {
+        start(REQUEST_START_CALL);
     }
 
     public void initialize(long groupId, long userId) {

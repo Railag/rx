@@ -6,11 +6,13 @@ import com.firrael.rx.model.AddUserResult;
 import com.firrael.rx.model.CreateGroupResult;
 import com.firrael.rx.model.GroupFetchResult;
 import com.firrael.rx.model.ImageResult;
+import com.firrael.rx.model.InviteToCallResult;
 import com.firrael.rx.model.Message;
 import com.firrael.rx.model.RemoveUserResult;
 import com.firrael.rx.model.SendFCMTokenResult;
 import com.firrael.rx.model.SendMessageResult;
 import com.firrael.rx.model.SendPNResult;
+import com.firrael.rx.model.StartCallResult;
 import com.firrael.rx.model.UserResult;
 import com.firrael.rx.view.ChatUser;
 
@@ -87,4 +89,12 @@ public interface RConnectorService {
     @FormUrlEncoded
     @POST("/user/send_pns_to_group")
     Observable<SendPNResult> sendPNToGroup(@Field("group_id") long groupId, @Field("title") String title, @Field("text") String text);
+
+    @FormUrlEncoded
+    @POST("/group/start_call")
+    Observable<StartCallResult> startCall(@Field("user_id") long userId);
+
+    @FormUrlEncoded
+    @POST("/group/invite_to_call")
+    Observable<InviteToCallResult> inviteToCall(@Field("user_id") long userId, @Field("socket_address") String socketAddress, @Field("call_id") String callId);
 }
