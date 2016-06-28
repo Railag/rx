@@ -32,9 +32,6 @@ public class MyGroupsPresenter extends BasePresenter<MyGroupsFragment> {
                         .observeOn(AndroidSchedulers.mainThread()),
                 MyGroupsFragment::onSuccess,
                 MyGroupsFragment::onError);
-
-        if (savedState != null)
-            start(REQUEST_MY_GROUPS);
     }
 
     public void request(long creatorID) {

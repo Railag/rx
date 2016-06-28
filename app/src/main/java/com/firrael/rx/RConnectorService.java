@@ -2,6 +2,7 @@ package com.firrael.rx;
 
 import android.graphics.Bitmap;
 
+import com.firrael.rx.model.AddInviteUserResult;
 import com.firrael.rx.model.AddUserResult;
 import com.firrael.rx.model.CreateGroupResult;
 import com.firrael.rx.model.GroupFetchResult;
@@ -66,8 +67,12 @@ public interface RConnectorService {
     Observable<List<Message>> fetchMessages(@Field("group_id") long groupId);
 
     @FormUrlEncoded
+    @POST("/group/add_invite_user")
+    Observable<AddInviteUserResult> addInviteUser(@Field("user_login_or_email") String loginOrEmail, @Field("group_id") long groupId);
+
+    @FormUrlEncoded
     @POST("/group/add_user")
-    Observable<AddUserResult> addUser(@Field("user_login_or_email") String loginOrEmail, @Field("group_id") long groupId);
+    Observable<AddUserResult> addUser(@Field("user_id") long userId, @Field("group_id") long groupId);
 
     @FormUrlEncoded
     @POST("/group/remove_user")

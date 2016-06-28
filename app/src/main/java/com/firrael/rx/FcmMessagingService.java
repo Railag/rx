@@ -21,6 +21,12 @@ import java.util.Map;
 public class FcmMessagingService extends FirebaseMessagingService {
     private static final String TAG = FcmMessagingService.class.getSimpleName();
 
+    private final static String CODE_FIELD = "code";
+    private final static String DATA_FIELD = "data";
+
+    public final static String PN_CODE_KEY = "pnCode";
+    public final static String PN_DATA_KEY = "pnData";
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
@@ -32,16 +38,29 @@ public class FcmMessagingService extends FirebaseMessagingService {
             }
         }
 
-
         if (notification != null) {
-            Log.i(TAG, notification.getBody());
-            sendPN(notification);
+            if (notification.getBody() != null)
+                Log.i(TAG, notification.getBody());
+
+            showPN(notification, data);
         }
     }
 
-    private void sendPN(RemoteMessage.Notification notification) {
+    private void showPN(RemoteMessage.Notification notification, Map<String, String> data) {
         Intent resultIntent = new Intent(getBaseContext(), MainActivity.class);
 
+        if (data.containsKey(CODE_FIELD)) {
+            String codeField = data.get(CODE_FIELD);
+            try {
+                int code = Integer.parseInt(codeField);
+                resultIntent.putExtra(PN_CODE_KEY, code);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (data.containsKey(DATA_FIELD))
+            resultIntent.putExtra(PN_DATA_KEY, data.get(DATA_FIELD));
 
         PendingIntent resultPendingIntent = PendingIntent
                 .getActivity(getBaseContext(), 0, resultIntent,

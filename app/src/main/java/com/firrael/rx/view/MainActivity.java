@@ -27,8 +27,10 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.firrael.rx.App;
+import com.firrael.rx.FcmMessagingService;
 import com.firrael.rx.R;
 import com.firrael.rx.RConnectorService;
+import com.firrael.rx.model.AddUserResult;
 import com.firrael.rx.model.Group;
 import com.firrael.rx.model.ImageResult;
 import com.firrael.rx.model.SendFCMTokenResult;
@@ -55,6 +57,9 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
 
     private static final String TAG_MAIN = "mainTag";
     private static final int PHOTO_CODE = 1;
+
+    private final static int PN_GROUP_INVITE = 1;
+    private final static int PN_GROUP_CALL = 2;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -113,7 +118,10 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
             }
         }
 
-        toSplash();
+
+        if (getIntent() != null) {
+            handlePN(getIntent());
+        }
     }
 
 
@@ -193,7 +201,7 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
             circularBitmapDrawable.setCircular(true);
             userImage.setImageDrawable(circularBitmapDrawable);
 
-            getPresenter().request(imageBitmap);
+            getPresenter().saveImage(imageBitmap);
         }
     }
 
@@ -225,7 +233,9 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
     }
 
     public void toUserLandingScreen() {
-        setFragment(UserLandingFragment.newInstance());
+        // TODO add user fragment with info if needed
+        // setFragment(UserLandingFragment.newInstance());
+        toMyGroups();
     }
 
     public void toCreateAccount() {
@@ -276,14 +286,29 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
         userEmail.setText(user.getEmail());
     }
 
-    public void onSuccess(ImageResult result) {
+    public void onSuccessSaveImage(ImageResult result) {
         User.get(this).setProfileImageUrl(result.getUrl());
         updateNavigationMenu();
     }
 
-    public void onError(Throwable throwable) {
+    public void onErrorSaveImage(Throwable throwable) {
         throwable.printStackTrace();
     }
+
+
+    public void onSuccessAddUser(AddUserResult result) {
+        if (result.invalid()) {
+            Toast.makeText(this, result.error, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        toMyGroups();
+    }
+
+    public void onErrorAddUser(Throwable throwable) {
+        throwable.printStackTrace();
+    }
+
 
     public void onFcmTokenSuccess(SendFCMTokenResult result) {
         if (result.invalid()) {
@@ -298,4 +323,39 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
     public void onFcmTokenError(Throwable throwable) {
         throwable.printStackTrace();
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handlePN(intent);
+    }
+
+    public void handlePN(Intent intent) {
+        Bundle args = intent.getExtras();
+        if (args != null) {
+            if (args.containsKey(FcmMessagingService.PN_CODE_KEY)) {
+                int pnCode = args.getInt(FcmMessagingService.PN_CODE_KEY);
+                String data = args.getString(FcmMessagingService.PN_DATA_KEY, "");
+                switch (pnCode) {
+                    case PN_GROUP_INVITE:
+                        User user = User.get(this);
+                        long userId = user.getId();
+                        try {
+                            long groupId = Long.valueOf(data);
+                            getPresenter().addToGroup(userId, groupId);
+                        } catch (NumberFormatException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case PN_GROUP_CALL:
+                        toWebrtcScreen(data);
+                        break;
+                }
+            }
+        } else { // no custom PN
+            toSplash();
+        }
+    }
+
+
 }

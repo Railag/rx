@@ -59,7 +59,7 @@ public class GroupCreatorPresenter extends BasePresenter<GroupCreatorFragment> {
                 GroupCreatorFragment::onErrorFetchMessages);
 
         restartableLatestCache(REQUEST_ADD_USER,
-                () -> service.addUser(addLogin, groupId)
+                () -> service.addInviteUser(addLogin, groupId)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread()),
                 GroupCreatorFragment::onSuccessAddUser,

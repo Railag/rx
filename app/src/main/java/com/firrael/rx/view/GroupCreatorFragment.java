@@ -9,7 +9,7 @@ import android.widget.EditText;
 
 import com.firrael.rx.ChatAdapter;
 import com.firrael.rx.R;
-import com.firrael.rx.model.AddUserResult;
+import com.firrael.rx.model.AddInviteUserResult;
 import com.firrael.rx.model.Group;
 import com.firrael.rx.model.Message;
 import com.firrael.rx.model.RemoveUserResult;
@@ -163,7 +163,7 @@ public class GroupCreatorFragment extends BaseFragment<GroupCreatorPresenter> {
         throwable.printStackTrace();
     }
 
-    public void onSuccessAddUser(AddUserResult result) {
+    public void onSuccessAddUser(AddInviteUserResult result) {
         if (result.invalid())
             toast(result.error);
         else {

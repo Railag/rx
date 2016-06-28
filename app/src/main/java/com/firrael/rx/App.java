@@ -86,7 +86,7 @@ public class App extends Application {
     }
 
     public static MainActivity getMainActivity() {
-        return activityRef.get();
+        return activityRef != null ? activityRef.get() : null;
     }
 
     private static <T> T createRetrofitService(final Class<T> clazz) {

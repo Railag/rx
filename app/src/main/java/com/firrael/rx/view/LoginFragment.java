@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.EditText;
 
 import com.firrael.rx.R;
+import com.firrael.rx.Utils;
 import com.firrael.rx.model.User;
 import com.firrael.rx.model.UserResult;
 import com.firrael.rx.presenter.LoginPresenter;
@@ -44,6 +45,7 @@ public class LoginFragment extends BaseFragment<LoginPresenter> {
 
     @OnClick(R.id.loginButton)
     public void login() {
+        Utils.hideKeyboard(getActivity());
         startLoading();
         getPresenter().request(loginField.getText().toString(), passwordField.getText().toString());
     }

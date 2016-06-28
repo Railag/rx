@@ -19,4 +19,5 @@ public class Requests {
     public static final int REQUEST_SEND_PN = 13;
     public static final int REQUEST_START_CALL = 14;
     public static final int REQUEST_INVITE_TO_CALL = 15;
+    public static final int REQUEST_PN_ADD_USER = 16;
 }

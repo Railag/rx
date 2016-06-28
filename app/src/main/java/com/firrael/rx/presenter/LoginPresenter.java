@@ -30,7 +30,7 @@ public class LoginPresenter extends BasePresenter<LoginFragment> {
         RConnectorService service = App.restService();
 
         restartableLatestCache(REQUEST_LOGIN,
-        () -> service.login(login, password)
+                () -> service.login(login, password)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread()),
                 LoginFragment::onSuccess,
