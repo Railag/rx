@@ -86,7 +86,13 @@ public class WebrtcActivity extends NucleusAppCompatActivity<WebrtcPresenter> im
 
         final Intent intent = getIntent();
         if (intent != null && intent.hasExtra(HOST)) {
-            socketAddress = intent.getStringExtra(HOST);//getString(R.string.webrtchost);
+            String host = intent.getStringExtra(HOST);
+            int dividerPos = host.indexOf('#');
+            if (dividerPos != -1) {
+                socketAddress = host.substring(0, dividerPos + 1);
+                callerId = host.substring(dividerPos + 1);
+            }
+            //getString(R.string.webrtchost);
         }
 
         vsv.setPreserveEGLContextOnPause(true);

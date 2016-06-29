@@ -119,8 +119,9 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
         }
 
 
-        if (getIntent() != null) {
-            handlePN(getIntent());
+        Intent intent = getIntent();
+        if (intent != null) {
+            handlePN(intent);
         }
     }
 
@@ -313,6 +314,7 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
     public void onFcmTokenSuccess(SendFCMTokenResult result) {
         if (result.invalid()) {
             Log.e(TAG, result.error);
+            return;
         }
 
         Log.i(TAG, result.result);
@@ -331,6 +333,14 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
     }
 
     public void handlePN(Intent intent) {
+        String action = intent.getAction();
+        if (action != null) {
+            if (action.equalsIgnoreCase(Intent.ACTION_MAIN)) {
+                toSplash();
+                return;
+            }
+        }
+
         Bundle args = intent.getExtras();
         if (args != null) {
             if (args.containsKey(FcmMessagingService.PN_CODE_KEY)) {
