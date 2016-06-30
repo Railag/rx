@@ -329,9 +329,12 @@ public class WebRtcClient {
         for (Peer peer : peers.values()) {
             peer.pc.dispose();
         }
-        if (videoSource != null)
+        if (videoSource != null) {
+            videoSource.stop();
             videoSource.dispose();
+        }
         factory.dispose();
+        client.off();
         client.disconnect();
         client.close();
     }

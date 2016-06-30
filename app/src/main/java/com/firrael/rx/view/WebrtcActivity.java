@@ -91,6 +91,8 @@ public class WebrtcActivity extends NucleusAppCompatActivity<WebrtcPresenter> im
             if (dividerPos != -1) {
                 socketAddress = host.substring(0, dividerPos + 1);
                 callerId = host.substring(dividerPos + 1);
+            } else {
+                socketAddress = host;
             }
             //getString(R.string.webrtchost);
         }

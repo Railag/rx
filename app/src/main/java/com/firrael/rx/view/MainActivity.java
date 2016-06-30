@@ -38,6 +38,7 @@ import com.firrael.rx.model.User;
 import com.firrael.rx.presenter.MainPresenter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import butterknife.BindView;
@@ -72,6 +73,8 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
 
     @BindView(R.id.loading)
     AVLoadingIndicatorView loading;
+
+    private FirebaseAnalytics analytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +121,7 @@ public class MainActivity extends NucleusAppCompatActivity<MainPresenter>
             }
         }
 
+        analytics = FirebaseAnalytics.getInstance(this);
 
         Intent intent = getIntent();
         if (intent != null) {

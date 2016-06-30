@@ -43,11 +43,11 @@ public interface RConnectorService {
     @POST("/user")
     Observable<UserResult> createAccount(@Field("login") String login, @Field("email") String email, @Field("password") String password);
 
-    @POST("/user_load_user_photo")
+    @POST("/user/load_user_photo")
     Observable<ImageResult> loadImage();
 
     @FormUrlEncoded
-    @POST("/user_save_user_photo")
+    @POST("/user/save_user_photo")
     Observable<ImageResult> saveImage(@Field("image") Bitmap imageBitmap);
 
     @FormUrlEncoded

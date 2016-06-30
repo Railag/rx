@@ -4,11 +4,15 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.firrael.rx.App;
 import com.firrael.rx.R;
+import com.firrael.rx.RConnectorService;
+import com.firrael.rx.model.SendFCMTokenResult;
 import com.firrael.rx.model.User;
 import com.firrael.rx.model.UserResult;
 import com.firrael.rx.presenter.CreateAccountPresenter;
@@ -16,12 +20,15 @@ import com.firrael.rx.presenter.CreateAccountPresenter;
 import butterknife.BindView;
 import butterknife.OnClick;
 import nucleus.factory.RequiresPresenter;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Railag on 01.06.2016.
  */
 @RequiresPresenter(CreateAccountPresenter.class)
 public class CreateAccountFragment extends BaseFragment<CreateAccountPresenter> {
+    private final static String TAG = CreateAccountFragment.class.getSimpleName();
 
     @BindView(R.id.loginField)
     EditText loginField;
@@ -114,6 +121,17 @@ public class CreateAccountFragment extends BaseFragment<CreateAccountPresenter> 
             return;
         }
         User.save(result, getActivity());
+        User user = User.get(getActivity());
+        String fcmToken = user.getFcmToken(getActivity());
+        if (!TextUtils.isEmpty(fcmToken)) {
+            RConnectorService service = App.restService();
+
+            service.sendFCMToken(user.getId(), fcmToken)
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::onFcmTokenSuccess, this::onFcmTokenError);
+        }
+
         toast("success create account");
         getMainActivity().updateNavigationMenu();
         getMainActivity().toUserLandingScreen();
@@ -123,6 +141,21 @@ public class CreateAccountFragment extends BaseFragment<CreateAccountPresenter> 
         error.printStackTrace();
         stopLoading();
         toast(error.getMessage());
+    }
+
+    public void onFcmTokenSuccess(SendFCMTokenResult result) {
+        if (result.invalid()) {
+            Log.e(TAG, result.error);
+            return;
+        }
+
+        Log.i(TAG, result.result);
+
+        User.fcmSaved(getActivity());
+    }
+
+    public void onFcmTokenError(Throwable throwable) {
+        throwable.printStackTrace();
     }
 
     @Override
